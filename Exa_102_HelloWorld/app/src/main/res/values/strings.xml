@@ -4,4 +4,6 @@
     <string name="inputHint">firstname lastname</string>
     <string name="buttonText">Continue</string>
     <string name="inputTitle">Please enter your name</string>
+    <string name="outputMsg">Hello %s - nice to meet you!</string>
+    <string name="finsihed">Finished</string>
 </resources>

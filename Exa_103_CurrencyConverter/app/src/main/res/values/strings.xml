@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Exa_103_CurrencyConverter</string>
+    <string name="title">Currency Converter</string>
+    <string name="eur">EUR</string>
+    <string name="usd">USD</string>
+    <string name="output">%s are %s</string>
+    <string name="switchDesc">Switch</string>
+    <string name="inputHintEUR">1 Euro</string>
+    <string name="inputHintUSD">1 US-Dollar</string>
+
+</resources>
