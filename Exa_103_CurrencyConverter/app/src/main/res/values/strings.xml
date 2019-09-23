@@ -3,9 +3,9 @@
     <string name="title">Currency Converter</string>
     <string name="eur">EUR</string>
     <string name="usd">USD</string>
-    <string name="output">%s are %s</string>
+    <string name="output">%.2f are %.2f</string>
     <string name="switchDesc">Switch</string>
     <string name="inputHintEUR">1 Euro</string>
     <string name="inputHintUSD">1 US-Dollar</string>
-
+    <string name="error">Error</string>
 </resources>

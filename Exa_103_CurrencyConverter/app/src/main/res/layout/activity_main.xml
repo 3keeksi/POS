@@ -11,6 +11,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/title"
         android:textAlignment="center"
         android:textColor="#E91E63"
         android:textSize="30sp"
@@ -27,6 +28,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="@string/eur"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -46,6 +48,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:text="@string/usd"
             android:textAlignment="center"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -58,10 +61,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="number" />
+        android:hint="@string/inputHintEUR"
+        android:inputType="numberDecimal" />
 
     <TextView
         android:id="@+id/tvOutput"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAlignment="center" />
 </LinearLayout>

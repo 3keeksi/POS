@@ -22,11 +22,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_rel_layout);
 
-        etInput = findViewById(R.id.edName);
-        btContinue = findViewById(R.id.btContinue);
-        tvMessage = findViewById(R.id.tvMessage);
+//        etInput = findViewById(R.id.edName);
+//        btContinue = findViewById(R.id.btContinue);
+//        tvMessage = findViewById(R.id.tvMessage);
 
         btContinue.setEnabled(false);
         etInput.addTextChangedListener(new TextWatcher() {
