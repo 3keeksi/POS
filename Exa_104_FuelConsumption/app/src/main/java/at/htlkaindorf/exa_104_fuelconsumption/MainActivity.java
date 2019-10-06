@@ -32,22 +32,24 @@ public class MainActivity extends AppCompatActivity {
         tvOutput = findViewById(R.id.tvOutput);
 
         btCalc.setOnClickListener(this::onCalcConsumption);
-        btCalc.setEnabled(false);
     }
 
     private void onCalcConsumption(View v) {
         String fuelInput = edFuel.getText().toString();
         String distanceInput = edDistance.getText().toString();
 
-        if(fuelInput.length() == 0 && distanceInput.length() == 0) {
+        if (fuelInput.length() == 0 && distanceInput.length() == 0) {
             Toast.makeText(getApplicationContext(), "no Content entered", Toast.LENGTH_LONG);
 
             return;
         }
 
         try {
-
-        } catch(NumberFormatException e) {
+            Double fuel = Double.parseDouble(fuelInput);
+            int distance = Integer.parseInt(distanceInput);
+            Double result = fuel / distance * 100;
+            tvOutput.setText(getString(R.string.consumptionFormat, result));
+        } catch (NumberFormatException e) {
             tvOutput.setText(R.string.illegal);
         }
     }

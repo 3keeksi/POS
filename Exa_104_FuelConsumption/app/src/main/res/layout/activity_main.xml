@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:text="@string/title"
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="#8BC34A"
@@ -29,6 +30,7 @@
         android:layout_toLeftOf="@id/edFuel"
         android:foregroundGravity="left"
         android:gravity="left"
+        android:text="@string/fuelHint"
         android:textSize="18sp"
         tools:text="@string/fuelHint" />
 
@@ -40,7 +42,7 @@
         android:layout_alignParentRight="true"
         android:ems="10"
         android:foregroundGravity="right"
-        android:inputType="textPersonName" />
+        android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/edDistance"
@@ -59,6 +61,7 @@
         android:layout_alignParentLeft="true"
         android:layout_marginRight="20sp"
         android:layout_toLeftOf="@id/edDistance"
+        android:text="@string/distanceHint"
         android:textSize="18sp"
         tools:text="@string/distanceHint" />
 
@@ -67,6 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/edDistance"
+        android:text="@string/calculateButton"
         tools:text="@string/calculateButton" />
 
     <TextView

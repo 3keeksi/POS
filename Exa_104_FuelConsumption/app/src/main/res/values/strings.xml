@@ -5,5 +5,5 @@
     <string name="distanceHint">Distance in km: </string>
     <string name="calculateButton">CALCULATE</string>
     <string name="illegal">Illegal Input</string>
-    <string name="consumptionFormat">Consumption: 100l/km</string>
+    <string name="consumptionFormat">Consumption: %.2f l/km</string>
 </resources>

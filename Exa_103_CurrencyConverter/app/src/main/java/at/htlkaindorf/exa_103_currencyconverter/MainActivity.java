@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void convertAndUpdate(Editable s) {
         try {
             String inputText = edInput.getText().toString();
-            double inputNumber = getInputNumber(inputText);
+            double inputNu$mber = getInputNumber(inputText);
             double endResult = 0;
 
             if(isEurLeft) {
