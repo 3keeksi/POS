@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3CC1EE"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tvCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:text="Kategorie:"
+        android:textAlignment="viewStart"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="7"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#fff"
+        android:gravity="center_vertical"
+        android:textAlignment="center"
+        android:textColor="@android:color/black" />
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="7">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/bt0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#000"
+                android:enabled="false"
+                android:hint="1"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/bt1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#000"
+                android:enabled="false"
+                android:hint="2"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:layout_weight="1">
+
+            <Button
+                android:id="@+id/bt2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#000"
+                android:enabled="false"
+                android:hint="3"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/bt3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button"
+                android:backgroundTint="#000"
+                android:enabled="false"
+                android:hint="4"
+                android:textColor="#FFFFFF" />
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvF1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#dadada" />
+
+        <TextView
+            android:id="@+id/tvF2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#dadada" />
+
+        <TextView
+            android:id="@+id/tvF3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#dadada" />
+
+        <TextView
+            android:id="@+id/tvF4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#dadada" />
+
+        <TextView
+            android:id="@+id/tvF5"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#dadada" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btContinue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="0"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#2369A5"
+        android:text="@string/weiter" />
+
+</LinearLayout>

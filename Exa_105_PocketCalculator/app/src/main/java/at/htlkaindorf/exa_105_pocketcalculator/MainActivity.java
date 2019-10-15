@@ -186,10 +186,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onOperator(View v) {
-
-    }
-
     public void onEnter(View v) {
         String text = tvOutput.getText().toString();
         text = text.replaceAll(",", "\\.");
@@ -197,7 +193,9 @@ public class MainActivity extends AppCompatActivity {
             stack.push(Double.parseDouble(text));
             firstInput = true;
         } catch (NumberFormatException e) {
-            Toast.makeText(v.getContext(), "Invalid Input", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(v.getContext(), "Invalid Input", Toast.LENGTH_SHORT).show();
+        } catch (RuntimeException e) {
+            Toast.makeText(v.getContext(), "Too many numbers on stack!", Toast.LENGTH_SHORT).show();
         }
     }
 }
