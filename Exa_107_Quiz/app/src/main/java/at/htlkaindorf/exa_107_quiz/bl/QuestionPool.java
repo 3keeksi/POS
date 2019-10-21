@@ -25,7 +25,6 @@ public class QuestionPool {
     }
 
     private void parseCSV(Resources resources) {
-
         Map<Category, Integer> rawIDs = new HashMap<>();
         rawIDs.put(Category.sport, R.raw.sport);
         rawIDs.put(Category.pc_components, R.raw.pc_components);

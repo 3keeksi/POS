@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 //        bt2.setOnClickListener(mcl);
 //        bt3.setOnClickListener(new MyClickListener());
 //        bt3.setOnLongClickListener(this);
-        bt4.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                onButton4Click(v);
-            }
-        });
+//        bt4.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                onButton4Click(v);
+//            }
+//        });
 //        bt5.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

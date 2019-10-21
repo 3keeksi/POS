@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private int currentIndex = 0;
     private Category currentCategory;
     private QuizQuestion currentQuestion;
+    private Boolean answered = false;
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Button btn : answerBtns) {
             btn.setEnabled(true);
-            btn.setOnClickListener(new View.OnClickListener(){
+            btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     onAnswerClick(v);
@@ -68,13 +69,17 @@ public class MainActivity extends AppCompatActivity {
         btContinue = findViewById(R.id.btContinue);
         btContinue.setOnClickListener(new onContinueListener());
 
+        setRandomQuestionPool();
+    }
+
+    public void setRandomQuestionPool() {
         Random rand = new Random();
-        if(rand.nextInt(2)==1) {
+        answered = false;
+        if (rand.nextInt(2) == 1) {
             displayQuestion(Category.sport);
         } else {
             displayQuestion(Category.pc_components);
         }
-//        displayQuestion(Category.sport);
     }
 
     public class onContinueListener implements View.OnClickListener {
@@ -85,10 +90,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onDisplayQuestion(View v) {
-        if(currentIndex >= 4) {
-            Toast.makeText(getApplicationContext(), "Already finished the questions", Toast.LENGTH_LONG).show();
+        if (!answered) {
+            Toast.makeText(getApplicationContext(), "Du hast noch nicht geantwortet!", Toast.LENGTH_LONG).show();
             return;
         }
+
+        answered = false;
         currentIndex++;
         displayQuestion(currentCategory);
     }
@@ -97,17 +104,35 @@ public class MainActivity extends AppCompatActivity {
         Button btn = (Button) v;
         int btnNumber = Integer.parseInt(btn.getHint().toString());
 
-        if(btnNumber == currentQuestion.getCorrectAnswer()) {
+        if (btnNumber == currentQuestion.getCorrectAnswer()) {
             btn.setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
             resultTvs[currentIndex].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
         } else {
             btn.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
-            answerBtns[currentQuestion.getCorrectAnswer()-1].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
+            answerBtns[currentQuestion.getCorrectAnswer() - 1].setBackgroundTintList(ColorStateList.valueOf(Color.GREEN));
             resultTvs[currentIndex].setBackgroundTintList(ColorStateList.valueOf(Color.RED));
         }
 
+        if (currentIndex == 4) {
+            btContinue.setText("Restart (Random)");
+            btContinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Button b = (Button) v;
+                    b.setText(R.string.weiter);
+                    currentIndex = 0;
+                    for (TextView tv : resultTvs) {
+                        tv.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                    }
+                    setRandomQuestionPool();
+                    b.setOnClickListener(new onContinueListener());
+                }
+            });
+        }
 
-        for (Button bt: answerBtns) {
+        answered = true;
+
+        for (Button bt : answerBtns) {
             bt.setEnabled(false);
         }
     }
@@ -118,12 +143,12 @@ public class MainActivity extends AppCompatActivity {
         currentCategory = cat;
         tvCategory.setText(getString(R.string.categoryFormat, cat.toString()));
 
-        Log.e(TAG, currentIndex+"");
+        Log.e(TAG, currentIndex + "");
 
         tvQuestion.setText(currentQuestion.getQuestion());
 
         List<String> answers = currentQuestion.getAnswers();
-        for (int i = 0; i<4;i++) {
+        for (int i = 0; i < 4; i++) {
             answerBtns[i].setText(answers.get(i));
             answerBtns[i].setEnabled(true);
             answerBtns[i].setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));

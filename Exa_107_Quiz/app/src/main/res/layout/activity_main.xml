@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_weight="1"
-        android:text="Kategorie:"
         android:textAlignment="viewStart"
         android:textSize="20sp" />
 
@@ -28,6 +27,7 @@
         android:background="@drawable/rounded_button"
         android:backgroundTint="#fff"
         android:gravity="center_vertical"
+        android:padding="5dp"
         android:textAlignment="center"
         android:textColor="@android:color/black" />
 
@@ -45,7 +45,7 @@
 
             <Button
                 android:id="@+id/bt0"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="10dp"
                 android:layout_weight="1"
