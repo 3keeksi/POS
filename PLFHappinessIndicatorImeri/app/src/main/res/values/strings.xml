@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">PLFHappinessIndicatorImeri</string>
+    <string name="title">Happiness Indicator</string>
+    <string name="indicatorFormat">Happiness: %d</string>
+</resources>

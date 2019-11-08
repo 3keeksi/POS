@@ -6,13 +6,19 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 import java.util.Random;
+import java.util.zip.Inflater;
 
 import at.htlkaindorf.exa_107_quiz.beans.QuizQuestion;
 import at.htlkaindorf.exa_107_quiz.bl.Category;
@@ -70,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         btContinue.setOnClickListener(new onContinueListener());
 
         setRandomQuestionPool();
+//        LinearLayout l = findViewById(R.id.main);
+//        try {
+//            showPopupWindow(l);
+//        } catch (RuntimeException e) {
+//            Log.e(TAG, e.toString());
+//        }
     }
 
     public void setRandomQuestionPool() {
@@ -135,6 +147,32 @@ public class MainActivity extends AppCompatActivity {
         for (Button bt : answerBtns) {
             bt.setEnabled(false);
         }
+    }
+
+    private void showPopupWindow(View view) {
+        // inflate the layout of the popup window
+        LayoutInflater inflater = (LayoutInflater)
+                getSystemService(LAYOUT_INFLATER_SERVICE);
+        View popupView = inflater.inflate(R.layout.category_popup, null);
+
+        // create the popup window
+        int width = LinearLayout.LayoutParams.MATCH_PARENT;
+        int height = LinearLayout.LayoutParams.MATCH_PARENT;
+        boolean focusable = true; // lets taps outside the popup also dismiss it
+        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
+
+        // show the popup window
+        // which view you pass in doesn't matter, it is only used for the window tolken
+        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+        // dismiss the popup window when touched
+        popupView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                popupWindow.dismiss();
+                return true;
+            }
+        });
     }
 
     public void displayQuestion(Category cat) {

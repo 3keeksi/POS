@@ -9,36 +9,9 @@
     android:stretchColumns="*"
     tools:context=".MainActivity">
 
-
         <Button
-            android:id="@+id/bt1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/bt2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/bt3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/bt4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onButton4Click"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/bt5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
+            android:id="@+id/btSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="SignIn" />
 </GridLayout>
