@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
         gdc = new GestureDetectorCompat(getApplicationContext(), mgl);
 
         btSignIn = findViewById(R.id.btSignIn);
+        btSignIn.setOnClickListener(this::onSignIn);
 
         btSignIn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -65,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
 //                onButton5Click(v);
 //            }
 //        });
+    }
+
+    public void onSignIn(View view) {
+
     }
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
