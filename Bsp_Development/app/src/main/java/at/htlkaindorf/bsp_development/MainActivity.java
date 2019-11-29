@@ -3,6 +3,7 @@ package at.htlkaindorf.bsp_development;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -11,8 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import at.htlkaindorf.bsp_development.beans.Person;
 
 public class MainActivity extends AppCompatActivity implements View.OnLongClickListener {
 
@@ -31,18 +40,17 @@ public class MainActivity extends AppCompatActivity implements View.OnLongClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        MyGestureListener mgl = new MyGestureListener();
-        gdc = new GestureDetectorCompat(getApplicationContext(), mgl);
 
-        btSignIn = findViewById(R.id.btSignIn);
-        btSignIn.setOnClickListener(this::onSignIn);
+        AssetManager am = getAssets();
 
-        btSignIn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gdc.onTouchEvent(event);
-            }
-        });
+        try {
+            InputStream is = am.open("daten.csv");
+            List<Person> persons = new BufferedReader(new InputStreamReader(is))
+                    .lines().skip(1).map(Person::new).collect(Collectors.toList());
+        } catch (IOException e) {
+            Log.e(TAG, "gang");
+        }
+
 //        bt1 = findViewById(R.id.bt1);
 //        bt2 = findViewById(R.id.bt2);
 //        bt3 = findViewById(R.id.bt3);
