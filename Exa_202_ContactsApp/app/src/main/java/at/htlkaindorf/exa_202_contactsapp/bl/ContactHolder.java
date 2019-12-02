@@ -33,9 +33,10 @@ public class ContactHolder extends RecyclerView.ViewHolder {
         this.tvName = tvName;
 
         layout.setOnClickListener(v -> {
-            Utils.currentContact = contact;
-            Utils.currentIndex = index;
+//            Utils.currentContact = contact;
+//            Utils.currentIndex = index;
             Intent intent = new Intent(Utils.main, ShowContact.class);
+            intent.putExtra("contact", contact);
             Utils.main.startActivity(intent);
         });
 

@@ -27,6 +27,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
 
     public ContactAdapter() {
         List<Contact> temp = IO_Handler.loadContacts();
+
         contacts.addAll(temp);
         filteredContacts.addAll(temp);
     }

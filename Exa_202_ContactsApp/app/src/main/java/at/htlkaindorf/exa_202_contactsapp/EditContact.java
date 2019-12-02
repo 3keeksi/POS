@@ -72,7 +72,7 @@ public class EditContact extends AppCompatActivity {
 
         rbtns = new ArrayList<>(Arrays.asList(findViewById(R.id.rbMale), findViewById(R.id.rbFemale), findViewById(R.id.rbDiverse)));
         rbtns.forEach(rb -> {
-            if (Contact.getStringToGender(rb.getText().toString()) == contact.getGender()) {
+            if (rb.getText().toString().charAt(0) == contact.getGender()) {
                 rb.setChecked(true);
             }
         });
@@ -80,6 +80,6 @@ public class EditContact extends AppCompatActivity {
 
     private char getGender() {
         RadioButton rb = findViewById(rgGender.getCheckedRadioButtonId());
-        return Contact.getStringToGender(rb.getText().toString());
+        return rb.getText().toString().charAt(0);
     }
 }

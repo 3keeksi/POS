@@ -1,12 +1,12 @@
 package at.htlkaindorf.exa_202_contactsapp.beans;
 
 import android.net.Uri;
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.net.URL;
 import java.util.Objects;
 
-public class Contact {
+public class Contact implements Parcelable {
     private String firstname;
     private String lastname;
     private String language;
@@ -28,10 +28,31 @@ public class Contact {
         this.firstname = split[1];
         this.lastname = split[2];
         this.language = split[3];
-        this.gender = getStringToGender(split[4]);
+        this.gender = split[4].charAt(0);
         this.picture = Uri.parse(split[5]);
         this.phoneNumber = split[6];
     }
+
+    protected Contact(Parcel in) {
+        firstname = in.readString();
+        lastname = in.readString();
+        language = in.readString();
+        gender = (char) in.readInt();
+        picture = in.readParcelable(Uri.class.getClassLoader());
+        phoneNumber = in.readString();
+    }
+
+    public static final Creator<Contact> CREATOR = new Creator<Contact>() {
+        @Override
+        public Contact createFromParcel(Parcel in) {
+            return new Contact(in);
+        }
+
+        @Override
+        public Contact[] newArray(int size) {
+            return new Contact[size];
+        }
+    };
 
     public String getFirstname() {
         return firstname;
@@ -81,17 +102,6 @@ public class Contact {
         this.phoneNumber = phoneNumber;
     }
 
-    public static char getStringToGender(String gender) {
-        if(gender.equalsIgnoreCase("Male")) {
-            return 'm';
-        } else if (gender.equalsIgnoreCase("Female")) {
-            return 'f';
-        } else if (gender.equalsIgnoreCase("Diverse")) {
-            return 'd';
-        }
-        return 'x';
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -108,5 +118,20 @@ public class Contact {
     @Override
     public int hashCode() {
         return Objects.hash(getFirstname(), getLastname(), getLanguage(), getGender(), getPicture(), getPhoneNumber());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(firstname);
+        dest.writeString(lastname);
+        dest.writeString(language);
+        dest.writeString(String.valueOf(gender));
+        dest.writeParcelable(picture, flags);
+        dest.writeString(phoneNumber);
     }
 }
