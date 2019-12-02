@@ -7,4 +7,12 @@ public class GiroAccount extends Account {
         super(iban, balance, interest);
         this.overdraft = overdraft;
     }
+
+    public double getOverdraft() {
+        return overdraft;
+    }
+
+    public void setOverdraft(double overdraft) {
+        this.overdraft = overdraft;
+    }
 }

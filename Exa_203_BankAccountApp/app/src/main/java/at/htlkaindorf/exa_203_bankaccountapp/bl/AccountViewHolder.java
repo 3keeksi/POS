@@ -8,6 +8,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import at.htlkaindorf.exa_203_bankaccountapp.MainActivity;
+
 public class AccountViewHolder extends RecyclerView.ViewHolder {
     private RelativeLayout lDetails;
     private ImageView ivProfile;
@@ -15,7 +17,7 @@ public class AccountViewHolder extends RecyclerView.ViewHolder {
     private TextView tvIBAN;
     private TextView tvAvMoney;
 
-    public AccountViewHolder(@NonNull View itemView, RelativeLayout lDetails, ImageView ivProfile, TextView tvTitle, TextView tvIBAN, TextView tvAvMoney) {
+    public AccountViewHolder(@NonNull View itemView, MainActivity main, RelativeLayout lDetails, ImageView ivProfile, TextView tvTitle, TextView tvIBAN, TextView tvAvMoney) {
         super(itemView);
         this.lDetails = lDetails;
         this.ivProfile = ivProfile;

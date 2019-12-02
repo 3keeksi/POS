@@ -47,7 +47,7 @@
             android:id="@+id/tvSeperator"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:background="@drawable/line" />
+            android:background="@drawable/seperator" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -7,4 +7,12 @@ public class StudentAccount extends Account{
         super(iban, balance, interest);
         this.debitCard = debitCard;
     }
+
+    public boolean isDebitCard() {
+        return debitCard;
+    }
+
+    public void setDebitCard(boolean debitCard) {
+        this.debitCard = debitCard;
+    }
 }

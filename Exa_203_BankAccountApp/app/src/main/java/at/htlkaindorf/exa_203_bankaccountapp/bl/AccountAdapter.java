@@ -10,9 +10,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import at.htlkaindorf.exa_203_bankaccountapp.MainActivity;
 import at.htlkaindorf.exa_203_bankaccountapp.R;
+import at.htlkaindorf.exa_203_bankaccountapp.beans.Account;
+import at.htlkaindorf.exa_203_bankaccountapp.beans.GiroAccount;
+import at.htlkaindorf.exa_203_bankaccountapp.beans.StudentAccount;
 
 public class AccountAdapter extends RecyclerView.Adapter<AccountViewHolder> {
+    private List<Account> accounts = new ArrayList<>();
+    private List<Account> filtered = new ArrayList<>();
+    private MainActivity main;
+
+    public AccountAdapter(List<Account> accounts, MainActivity main) {
+        this.accounts.addAll(accounts);
+        this.filtered.addAll(accounts);
+        this.main = main;
+    }
+
     @NonNull
     @Override
     public AccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -24,16 +41,39 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountViewHolder> {
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         TextView tvAvMoney = view.findViewById(R.id.tvAvailableMoney);
 
-        return new AccountViewHolder(view, rl, ivProfile, tvTitle, tvIBAN, tvAvMoney);
+        return new AccountViewHolder(view, main, rl, ivProfile, tvTitle, tvIBAN, tvAvMoney);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
+        Account account = filtered.get(position);
 
+        int id = 0;
+        if (account instanceof StudentAccount) {
+            id = R.drawable.book;
+        } else {
+            id = R.drawable.credit_card;
+        }
+        holder.getIvProfile().setImageResource(id);
+
+        holder.getTvIBAN().setText(account.getIban());
+        // TODO rest
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return filtered.size();
+    }
+
+    public void filterAccounts(String type) {
+        filtered.clear();
+        filtered.addAll(accounts);
+
+        if(type.equalsIgnoreCase("student")) {
+            filtered.removeIf(a -> !(a instanceof StudentAccount));
+        } else if (type.equalsIgnoreCase("giro")){
+            filtered.removeIf(a -> !(a instanceof GiroAccount));
+        }
+        this.notifyDataSetChanged();
     }
 }
