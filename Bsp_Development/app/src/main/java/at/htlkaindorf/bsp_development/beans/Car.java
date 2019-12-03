@@ -23,4 +23,9 @@ public class Car extends Vehicle {
     public Car(String brand, String model, YearMonth constructionDate) {
         super(brand, model, constructionDate);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s: %s", getBrand(), getModel());
+    }
 }

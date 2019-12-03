@@ -8,9 +8,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import at.htlkaindorf.exa_203_bankaccountapp.beans.Account;
 import at.htlkaindorf.exa_203_bankaccountapp.beans.GiroAccount;
+import at.htlkaindorf.exa_203_bankaccountapp.beans.StudentAccount;
 
 public class Contact_IO {
     public static List<Account> loadAccounts(AssetManager am) {
@@ -24,12 +26,19 @@ public class Contact_IO {
                         if(split[1].equalsIgnoreCase("giro")) {
                             return new GiroAccount(
                                     split[2],
-                                    // TODO idk what is what
-                            )
+                                    Double.parseDouble(split[3]),
+                                    Float.parseFloat(split[6]),
+                                    Double.parseDouble(split[4])
+                            );
                         } else {
-
+                            return new StudentAccount(
+                                    split[2],
+                                    Double.parseDouble(split[3]),
+                                    Float.parseFloat(split[6]),
+                                    false
+                            );
                         }
-                    })
+                    }).collect(Collectors.toList());
         } catch (IOException e) {
             return new ArrayList<>();
         }
