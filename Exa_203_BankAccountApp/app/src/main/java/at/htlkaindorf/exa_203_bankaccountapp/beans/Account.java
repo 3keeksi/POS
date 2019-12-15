@@ -1,8 +1,13 @@
 package at.htlkaindorf.exa_203_bankaccountapp.beans;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
-public class Account {
+import java.util.Objects;
+
+public class Account implements Parcelable {
     protected String iban;
     protected double balance;
     protected float interest;
@@ -12,6 +17,24 @@ public class Account {
         this.balance = balance;
         this.interest = interest;
     }
+
+    protected Account(Parcel in) {
+        iban = in.readString();
+        balance = in.readDouble();
+        interest = in.readFloat();
+    }
+
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
 
     @NonNull
     @Override
@@ -41,5 +64,40 @@ public class Account {
 
     public void setInterest(float interest) {
         this.interest = interest;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(iban);
+        dest.writeDouble(balance);
+        dest.writeFloat(interest);
+    }
+
+    public double getAvailable() {
+        if (this instanceof StudentAccount) {
+            return this.getBalance();
+        } else if (this instanceof GiroAccount) {
+            GiroAccount giro = (GiroAccount) this;
+            return this.getBalance() + giro.getOverdraft();
+        }
+        return 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return getIban().equals(account.getIban());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIban());
     }
 }

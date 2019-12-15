@@ -1,4 +1,4 @@
-package at.htlkaindorf.exa_203_bankaccountapp;
+package at.htlkaindorf.exa_203_bankaccountapp.beans;
 
 import android.content.res.AssetManager;
 
