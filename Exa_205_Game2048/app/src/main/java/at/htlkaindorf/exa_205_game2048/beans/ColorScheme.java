@@ -1,7 +1,7 @@
 package at.htlkaindorf.exa_205_game2048.beans;
 
 public enum ColorScheme {
-    C0(0, 0xffe8dfc1, 0xff000000),
+    C0(0, 0xffe8dfc1, 0x00000000),
     C2(2, 0xfff7e1bc, 0xff000000),
     C4(4, 0xffdbd1ad, 0xff000000),
     C8(8, 0xfffcc16d, 0xffffffff),

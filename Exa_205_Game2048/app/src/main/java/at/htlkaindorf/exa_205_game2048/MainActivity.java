@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -30,13 +31,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final GestureDetectorCompat gdc = new GestureDetectorCompat(this, new SwipeListener());
 
         for (int i = 0; i < btns.length; i++) {
             for (int j = 0; j < btns[i].length; j++) {
                 btns[i][j] = findViewById(getResources().getIdentifier("btNum" + (i * 4 + j + 1), "id", getPackageName()));
+                btns[i][j].setBackground(getDrawable(R.drawable.tile));
+                btns[i][j].setOnTouchListener((v, evt) -> gdc.onTouchEvent(evt));
                 setButton(btns[i][j], "C0");
             }
         }
+
+        setButton(btns[0][0], "C2");
+        setButton(btns[2][0], "C2");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -45,22 +52,24 @@ public class MainActivity extends AppCompatActivity {
         tlContainer = findViewById(R.id.tlContainer);
         tlContainer.getLayoutParams().height = size.x;
 
-        final GestureDetectorCompat gdc = new GestureDetectorCompat(this, new SwipeListener());
-
-        tlContainer.setOnTouchListener(new TableLayout.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gdc.onTouchEvent(event);
-            }
-        });
-
         btReset = findViewById(R.id.btReset);
         btReset.setOnClickListener(v -> resetGame());
     }
 
     public void makeMove(Direction dir) {
-        switch(dir) {
-
+        switch (dir) {
+            case UP:
+                verticalMerge(dir);
+                break;
+            case DOWN:
+                verticalMerge(dir);
+                break;
+            case LEFT:
+                horizontalMerge(dir);
+                break;
+            case RIGHT:
+                horizontalMerge(dir);
+                break;
         }
     }
 
@@ -72,10 +81,85 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void verticalMerge(Direction dir) {
+        int y = 0;
+        int plus = 0;
+        if (dir == Direction.UP) {
+            y = 0;
+            plus = 1;
+        } else {
+            y = 3;
+            plus = -1;
+        }
+        for (int x = 0; x < 4; x++) {
+            int searchY = -1;
+            int replaceY = -1;
+            String searchNum = "";
+            for (; 0 <= y && y < 4; y += plus) {
+                Button btn = btns[y][x];
+                String text = btn.getText().toString();
+                if (text.equals(searchNum)) {
+                    int num = Integer.parseInt(text) * 2;
+                    Button btnToChange = btns[searchY][x];
+                    setButton(btnToChange, "C" + num);
+                    setButton(btn, "C0");
+                    searchY=-1;
+                } else if (!text.equals("0")) {
+//                    setButton(btn, "C0");
+//                    Log.d("main", " ");
+//                    Log.d("main", String.format("[%d][%d]", y, x));
+//                    Log.d("main", replaceY + " : " + y);
+                    searchY = y;
+                    searchNum = text;
+                } else {
+                    if (searchY == -1) {
+                        replaceY = y;
+                    }
+                }
+            }
+        }
+    }
+
+    public void horizontalMerge(Direction dir) {
+        int x = 0;
+        int plus = 0;
+        if (dir == Direction.LEFT) {
+            x = 0;
+            plus = 1;
+        } else {
+            x = 3;
+            plus = -1;
+        }
+        for (int y = 0; y < 4; y++) {
+            int searchX = -1;
+            int replaceX = -1;
+            String searchNum = "";
+            for (; 0 <= x && x < 4; x += plus) {
+                Button btn = btns[y][x];
+                String text = btn.getText().toString();
+                if (text.equals(searchNum)) {
+                    int num = Integer.parseInt(text) * 2;
+                    Button btnToChange = btns[y][searchX];
+                    setButton(btnToChange, "C" + num);
+                    setButton(btn, "C0");
+                } else if (!text.equals("0")) {
+                    setButton(btn, "C0");
+                    Log.d("main", "");
+                    Log.d("main", String.format("[%d][%d]", y, x));
+                    Log.d("main", replaceX + "");
+                    searchX = replaceX;
+                    searchNum = text;
+                } else {
+                    replaceX = x;
+                }
+            }
+        }
+    }
+
     public void setButton(Button btn, String button) {
-        btn.setBackground(getDrawable(R.drawable.tile));
-        btn.setBackgroundTintList(getBackground("C0"));
-        btn.setText("");
+        btn.setBackgroundTintList(getBackground(button));
+        btn.setText(getValue(button));
+        btn.setTextColor(getFontColor(button));
     }
 
     public static ColorStateList getBackground(String button) {
@@ -91,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class SwipeListener extends GestureDetector.SimpleOnGestureListener {
-        private static final int MIN_DIST = 100;
-        private static final int MAX_DIST = 1000;
+        private static final int MIN_DIST = 10;
+        private static final int MAX_DIST = 10000;
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -103,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
             Direction YDirection = Direction.NONE;
             Direction XDirection = Direction.NONE;
-            Direction finalDirection;
+            Direction finalDirection = Direction.NONE;
 
             if (MIN_DIST < deltaXAbs && deltaXAbs < MAX_DIST) {
                 if (deltaX > 0) {
@@ -133,6 +217,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return false;
             }
+
+            makeMove(finalDirection);
 
             return true;
         }
