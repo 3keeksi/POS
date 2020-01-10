@@ -16,15 +16,18 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
+import android.widget.TextView;
 
 import at.htlkaindorf.exa_205_game2048.beans.ColorScheme;
 import at.htlkaindorf.exa_205_game2048.beans.Direction;
+import at.htlkaindorf.exa_205_game2048.bl.GameLogic;
 
 public class MainActivity extends AppCompatActivity {
-    private Button[][] btns = new Button[4][4];
     private LinearLayout layout;
     private TableLayout tlContainer;
     private ImageButton btReset;
+    private GameLogic gl;
+    private TextView tvPoints;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final GestureDetectorCompat gdc = new GestureDetectorCompat(this, new SwipeListener());
 
+        Button[][] btns = new Button[4][4];
         for (int i = 0; i < btns.length; i++) {
             for (int j = 0; j < btns[i].length; j++) {
                 btns[i][j] = findViewById(getResources().getIdentifier("btNum" + (i * 4 + j + 1), "id", getPackageName()));
@@ -41,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
                 setButton(btns[i][j], "C0");
             }
         }
+        gl = new GameLogic(btns, this);
 
-        setButton(btns[0][0], "C2");
-        setButton(btns[2][0], "C2");
+//        setButton(btns[0][0], "C2");
+//        setButton(btns[2][0], "C4");
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -53,107 +58,11 @@ public class MainActivity extends AppCompatActivity {
         tlContainer.getLayoutParams().height = size.x;
 
         btReset = findViewById(R.id.btReset);
-        btReset.setOnClickListener(v -> resetGame());
-    }
+        btReset.setOnClickListener(v -> gl.resetGame());
 
-    public void makeMove(Direction dir) {
-        switch (dir) {
-            case UP:
-                verticalMerge(dir);
-                break;
-            case DOWN:
-                verticalMerge(dir);
-                break;
-            case LEFT:
-                horizontalMerge(dir);
-                break;
-            case RIGHT:
-                horizontalMerge(dir);
-                break;
-        }
-    }
+        tvPoints = findViewById(R.id.tvPoints);
 
-    public void resetGame() {
-
-    }
-
-    public void setNewValue() {
-
-    }
-
-    public void verticalMerge(Direction dir) {
-        int y = 0;
-        int plus = 0;
-        if (dir == Direction.UP) {
-            y = 0;
-            plus = 1;
-        } else {
-            y = 3;
-            plus = -1;
-        }
-        for (int x = 0; x < 4; x++) {
-            int searchY = -1;
-            int replaceY = -1;
-            String searchNum = "";
-            for (; 0 <= y && y < 4; y += plus) {
-                Button btn = btns[y][x];
-                String text = btn.getText().toString();
-                if (text.equals(searchNum)) {
-                    int num = Integer.parseInt(text) * 2;
-                    Button btnToChange = btns[searchY][x];
-                    setButton(btnToChange, "C" + num);
-                    setButton(btn, "C0");
-                    searchY=-1;
-                } else if (!text.equals("0")) {
-//                    setButton(btn, "C0");
-//                    Log.d("main", " ");
-//                    Log.d("main", String.format("[%d][%d]", y, x));
-//                    Log.d("main", replaceY + " : " + y);
-                    searchY = y;
-                    searchNum = text;
-                } else {
-                    if (searchY == -1) {
-                        replaceY = y;
-                    }
-                }
-            }
-        }
-    }
-
-    public void horizontalMerge(Direction dir) {
-        int x = 0;
-        int plus = 0;
-        if (dir == Direction.LEFT) {
-            x = 0;
-            plus = 1;
-        } else {
-            x = 3;
-            plus = -1;
-        }
-        for (int y = 0; y < 4; y++) {
-            int searchX = -1;
-            int replaceX = -1;
-            String searchNum = "";
-            for (; 0 <= x && x < 4; x += plus) {
-                Button btn = btns[y][x];
-                String text = btn.getText().toString();
-                if (text.equals(searchNum)) {
-                    int num = Integer.parseInt(text) * 2;
-                    Button btnToChange = btns[y][searchX];
-                    setButton(btnToChange, "C" + num);
-                    setButton(btn, "C0");
-                } else if (!text.equals("0")) {
-                    setButton(btn, "C0");
-                    Log.d("main", "");
-                    Log.d("main", String.format("[%d][%d]", y, x));
-                    Log.d("main", replaceX + "");
-                    searchX = replaceX;
-                    searchNum = text;
-                } else {
-                    replaceX = x;
-                }
-            }
-        }
+        gl.resetGame();
     }
 
     public void setButton(Button btn, String button) {
@@ -172,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static ColorStateList getFontColor(String button) {
         return ColorStateList.valueOf(ColorScheme.valueOf(button).getFontColor());
+    }
+
+    public void setPoints(int points) {
+        tvPoints.setText(getString(R.string.points, points));
     }
 
     private class SwipeListener extends GestureDetector.SimpleOnGestureListener {
@@ -218,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
-            makeMove(finalDirection);
-
+            gl.makeMove(finalDirection);
             return true;
         }
     }
