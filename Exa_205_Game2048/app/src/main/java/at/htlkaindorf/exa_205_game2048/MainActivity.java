@@ -78,10 +78,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setButtons(int[][] values) {
+        boolean won = false;
         for (int i = 0; i < btns.length; i++) {
             for (int j = 0; j < btns[i].length; j++) {
+                if(values[i][j] == 2048) {
+                    won = true;
+                }
                 setButton(btns[i][j], "C" + values[i][j]);
             }
+        }
+        if (won) {
+            gameWon();
         }
     }
 
@@ -103,6 +110,17 @@ public class MainActivity extends AppCompatActivity {
         tvLost.setBackgroundResource(R.drawable.tile);
         tvLost.setBackgroundTintList(ColorStateList.valueOf(0xbb555555));
         tvLost.setTextColor(0xCCFF5100);
+
+        btReset.setBackgroundTintList(ColorStateList.valueOf(0xffffa500));
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void gameWon() {
+        flLost.setOnTouchListener((v, evt) -> true);
+        tvLost.setBackgroundResource(R.drawable.tile);
+        tvLost.setBackgroundTintList(ColorStateList.valueOf(0xbb555555));
+        tvLost.setTextColor(0xdd00ff00);
+        tvLost.setText("You have won!\nCongratulations!");
 
         btReset.setBackgroundTintList(ColorStateList.valueOf(0xffffa500));
     }
