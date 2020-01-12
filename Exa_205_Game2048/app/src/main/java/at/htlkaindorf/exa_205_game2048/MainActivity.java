@@ -12,8 +12,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,20 +32,23 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvPoints;
     private Button[][] btns;
     private ImageView ivDir;
+    private TextView tvLost;
+    private GestureDetectorCompat gdc;
+    private FrameLayout flLost;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final GestureDetectorCompat gdc = new GestureDetectorCompat(this, new SwipeListener());
+
+        gdc = new GestureDetectorCompat(this, new SwipeListener());
 
         btns = new Button[4][4];
         for (int i = 0; i < btns.length; i++) {
             for (int j = 0; j < btns[i].length; j++) {
                 btns[i][j] = findViewById(getResources().getIdentifier("btNum" + (i * 4 + j + 1), "id", getPackageName()));
                 btns[i][j].setBackground(getDrawable(R.drawable.tile));
-                btns[i][j].setOnTouchListener((v, evt) -> gdc.onTouchEvent(evt));
                 setButton(btns[i][j], "C0");
             }
         }
@@ -53,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
         ivDir = findViewById(R.id.ivDir);
         ivDir.setBackgroundResource(R.drawable.tile);
+        ivDir.setOnClickListener(v -> {
+            gameLost();
+        });
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -62,11 +68,13 @@ public class MainActivity extends AppCompatActivity {
         tlContainer.getLayoutParams().height = size.x;
 
         btReset = findViewById(R.id.btReset);
-        btReset.setOnClickListener(v -> gl.resetGame());
+        btReset.setOnClickListener(v -> resetGame());
 
+        tvLost = findViewById(R.id.tvLost);
+        flLost = findViewById(R.id.flLost);
         tvPoints = findViewById(R.id.tvPoints);
 
-        gl.resetGame();
+        resetGame();
     }
 
     public void setButtons(int[][] values) {
@@ -75,6 +83,28 @@ public class MainActivity extends AppCompatActivity {
                 setButton(btns[i][j], "C" + values[i][j]);
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void resetGame() {
+        btReset.setBackgroundTintList(ColorStateList.valueOf(0xff555555));
+        tvLost.setTextColor(0x00000000);
+        tvLost.setBackgroundTintList(ColorStateList.valueOf(0x00000000));
+        flLost.setOnTouchListener((v, evt) -> {
+//            Log.d("main", "reeee");
+            return !gdc.onTouchEvent(evt);
+        });
+        gl.resetGame();
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void gameLost() {
+        flLost.setOnTouchListener((v, evt) -> true);
+        tvLost.setBackgroundResource(R.drawable.tile);
+        tvLost.setBackgroundTintList(ColorStateList.valueOf(0xbb555555));
+        tvLost.setTextColor(0xCCFF5100);
+
+        btReset.setBackgroundTintList(ColorStateList.valueOf(0xffffa500));
     }
 
     public void setButton(Button btn, String button) {
@@ -155,10 +185,11 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
             try {
-                gl.makeMove(finalDirection);
-                setIvDirBG(finalDirection);
-                if (gl.checkIfLost()) {
 
+                gl.makeMove(finalDirection);
+
+                if (gl.checkIfLost()) {
+                    gameLost();
                 }
             } catch (Exception e) {
                 Log.e("fling", e.toString());

@@ -15,6 +15,7 @@ public class GameLogic {
     private int points = 0;
     private MainActivity m;
     private Random rand = new Random();
+    private boolean moved = false;
 
     public GameLogic(MainActivity m) {
         this.m = m;
@@ -34,15 +35,28 @@ public class GameLogic {
                 horizontalMerge(dir);
                 break;
         }
-        setNewValue();
-        m.setPoints(points);
-        m.setButtons(values);
+        if(moved) {
+            setNewValue();
+            m.setPoints(points);
+            moved = false;
+            m.setIvDirBG(dir);
+            m.setButtons(values);
+        }
     }
 
     public boolean checkIfLost() {
-//        if (fieldsSet >= 16) {
-//
-//        }
+        if (fieldsSet >= 16) {
+            int [][] valuesCopy = new int[values.length][];
+            int fieldsSetCopy = fieldsSet;
+            for(int i = 0; i < values.length; i++) valuesCopy[i] = values[i].clone();
+            verticalMerge(Direction.UP);
+            horizontalMerge(Direction.RIGHT);
+            if(!moved) {
+                return true;
+            }
+            values = valuesCopy;
+            fieldsSet = fieldsSetCopy;
+        }
         return false;
     }
 
@@ -50,6 +64,7 @@ public class GameLogic {
         clearLayout();
         points = 0;
         fieldsSet = 0;
+        moved = false;
         setNewValue();
         setNewValue();
         m.setPoints(points);
@@ -63,6 +78,7 @@ public class GameLogic {
     }
 
     public void setNewValue() {
+        if(fieldsSet >=16) return;
         boolean set = false;
         do {
             int y = rand.nextInt(4);
@@ -101,11 +117,14 @@ public class GameLogic {
                     int num = btnValue * 2;
                     values[searchY][x] = num;
                     values[y][x] = 0;
+                    moved = true;
+                    fieldsSet--;
                     replaceY = searchY + plus;
                     searchNum = -1;
                     searchY = -1;
                 } else if (btnValue != 0) {
                     if (replaceY != -1) {
+                        moved = true;
                         searchY = replaceY;
                         values[searchY][x] = btnValue;
                         values[y][x] = 0;
@@ -144,6 +163,8 @@ public class GameLogic {
                     int num = btnValue * 2;
                     values[y][searchX] = num;
                     values[y][x] = 0;
+                    moved = true;
+                    fieldsSet--;
                     replaceX = searchX + plus;
                     searchX = -1;
                     searchNum = -1;
@@ -152,6 +173,7 @@ public class GameLogic {
                         searchX = replaceX;
                         values[y][searchX] = btnValue;
                         values[y][x] = 0;
+                        moved = true;
                         replaceX = searchX + plus;
                     } else {
                         searchX = x;
