@@ -3,6 +3,7 @@ package at.htlkaindorf.exa_205_game2048.bl;
 import android.util.Log;
 import android.widget.Button;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import at.htlkaindorf.exa_205_game2048.MainActivity;
@@ -12,13 +13,14 @@ public class GameLogic {
     private int[][] values = new int[4][4];
     private int fieldsSet = 0;
     private int points = 0;
-    private Button[][] btns;
     private MainActivity m;
     private Random rand = new Random();
 
-    public GameLogic(Button[][] btns, MainActivity m) {
-        this.btns = btns;
+    public GameLogic(MainActivity m) {
         this.m = m;
+        for (int[] array : values) {
+            Arrays.fill(array, 0);
+        }
     }
 
     public void makeMove(Direction dir) {
@@ -33,9 +35,14 @@ public class GameLogic {
                 break;
         }
         setNewValue();
+        m.setPoints(points);
+        m.setButtons(values);
     }
 
     public boolean checkIfLost() {
+//        if (fieldsSet >= 16) {
+//
+//        }
         return false;
     }
 
@@ -46,28 +53,27 @@ public class GameLogic {
         setNewValue();
         setNewValue();
         m.setPoints(points);
+        m.setButtons(values);
     }
 
     public void clearLayout() {
-        for (int i = 0; i < btns.length; i++) {
-            for (int j = 0; j < btns[i].length; j++) {
-                m.setButton(btns[i][j], "C0");
-            }
+        for (int i = 0; i < values.length; i++) {
+            Arrays.fill(values[i], 0);
         }
     }
 
     public void setNewValue() {
-        int y = rand.nextInt(4);
-        int x = rand.nextInt(4);
         boolean set = false;
         do {
-            String text = btns[y][x].getText().toString();
-            if (text.equals("0")) {
+            int y = rand.nextInt(4);
+            int x = rand.nextInt(4);
+            int value = values[y][x];
+            if (value == 0) {
                 set = true;
                 fieldsSet++;
                 int num = rand.nextInt(3) < 2 ? 2 : 4;
-                m.setButton(btns[y][x], "C" + num);
-                points = num;
+                values[y][x] = num;
+                points += num;
             }
         } while (!set);
     }
@@ -87,28 +93,27 @@ public class GameLogic {
         for (int x = 0; x < 4; x++) {
             int searchY = -1;
             int replaceY = -1;
-            String searchNum = "";
+            int searchNum = -1;
             y = yStart;
             for (; 0 <= y && y < 4; y += plus) {
-                Button btn = btns[y][x];
-                String text = btn.getText().toString();
-                if (text.equals(searchNum)) {
-                    int num = Integer.parseInt(text) * 2;
-                    Button btnToChange = btns[searchY][x];
-                    m.setButton(btnToChange, "C" + num);
-                    m.setButton(btn, "C0");
+                int btnValue = values[y][x];
+                if (searchNum == btnValue) {
+                    int num = btnValue * 2;
+                    values[searchY][x] = num;
+                    values[y][x] = 0;
+                    replaceY = searchY + plus;
+                    searchNum = -1;
                     searchY = -1;
-                    replaceY = -1;
-                } else if (!text.equals("0")) {
+                } else if (btnValue != 0) {
                     if (replaceY != -1) {
                         searchY = replaceY;
-                        m.setButton(btns[searchY][x], "C" + text);
-                        m.setButton(btn, "C0");
-                        replaceY = searchY += plus;
+                        values[searchY][x] = btnValue;
+                        values[y][x] = 0;
+                        replaceY = searchY + plus;
                     } else {
                         searchY = y;
                     }
-                    searchNum = text;
+                    searchNum = btnValue;
                 } else if (replaceY == -1) {
                     replaceY = y;
                 }
@@ -130,28 +135,28 @@ public class GameLogic {
         for (int y = 0; y < 4; y++) {
             int searchX = -1;
             int replaceX = -1;
-            String searchNum = "";
+//            String searchNum = "";
+            int searchNum = -1;
             x = xStart;
             for (; 0 <= x && x < 4; x += plus) {
-                Button btn = btns[y][x];
-                String text = btn.getText().toString();
-                if (text.equals(searchNum)) {
-                    int num = Integer.parseInt(text) * 2;
-                    Button btnToChange = btns[y][searchX];
-                    m.setButton(btnToChange, "C" + num);
-                    m.setButton(btn, "C0");
+                int btnValue = values[y][x];
+                if (searchNum == btnValue) {
+                    int num = btnValue * 2;
+                    values[y][searchX] = num;
+                    values[y][x] = 0;
+                    replaceX = searchX + plus;
                     searchX = -1;
-                    replaceX = -1;
-                } else if (!text.equals("0")) {
+                    searchNum = -1;
+                } else if (btnValue != 0) {
                     if (replaceX != -1) {
                         searchX = replaceX;
-                        m.setButton(btns[y][searchX], "C" + btn.getText().toString());
-                        m.setButton(btn, "C0");
-                        replaceX = searchX += plus;
+                        values[y][searchX] = btnValue;
+                        values[y][x] = 0;
+                        replaceX = searchX + plus;
                     } else {
                         searchX = x;
                     }
-                    searchNum = text;
+                    searchNum = btnValue;
                 } else if (replaceX == -1) {
                     replaceX = x;
                 }

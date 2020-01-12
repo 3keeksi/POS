@@ -6,6 +6,7 @@ import androidx.core.view.GestureDetectorCompat;
 import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.graphics.Point;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -14,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btReset;
     private GameLogic gl;
     private TextView tvPoints;
+    private Button[][] btns;
+    private ImageView ivDir;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -36,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final GestureDetectorCompat gdc = new GestureDetectorCompat(this, new SwipeListener());
 
-        Button[][] btns = new Button[4][4];
+        btns = new Button[4][4];
         for (int i = 0; i < btns.length; i++) {
             for (int j = 0; j < btns[i].length; j++) {
                 btns[i][j] = findViewById(getResources().getIdentifier("btNum" + (i * 4 + j + 1), "id", getPackageName()));
@@ -45,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
                 setButton(btns[i][j], "C0");
             }
         }
-        gl = new GameLogic(btns, this);
+        gl = new GameLogic(this);
 
-//        setButton(btns[0][0], "C2");
-//        setButton(btns[2][0], "C4");
+        ivDir = findViewById(R.id.ivDir);
+        ivDir.setBackgroundResource(R.drawable.tile);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -65,10 +69,30 @@ public class MainActivity extends AppCompatActivity {
         gl.resetGame();
     }
 
+    public void setButtons(int[][] values) {
+        for (int i = 0; i < btns.length; i++) {
+            for (int j = 0; j < btns[i].length; j++) {
+                setButton(btns[i][j], "C" + values[i][j]);
+            }
+        }
+    }
+
     public void setButton(Button btn, String button) {
         btn.setBackgroundTintList(getBackground(button));
         btn.setText(getValue(button));
         btn.setTextColor(getFontColor(button));
+    }
+
+    public void setIvDirBG(Direction dir) {
+        String transName = "trans_" + dir.toString().toLowerCase();
+        ivDir.setBackgroundResource(
+                getResources()
+                        .getIdentifier(transName,
+                                "drawable",
+                                getPackageName())
+        );
+        AnimationDrawable dirAnim = (AnimationDrawable) ivDir.getBackground();
+        dirAnim.start();
     }
 
     public static ColorStateList getBackground(String button) {
@@ -88,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class SwipeListener extends GestureDetector.SimpleOnGestureListener {
-        private static final int MIN_DIST = 10;
-        private static final int MAX_DIST = 10000;
+        private static final int MIN_DIST = 100;
+        private static final int MAX_DIST = 1000;
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -130,8 +154,18 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 return false;
             }
+            try {
+                gl.makeMove(finalDirection);
+                setIvDirBG(finalDirection);
+                if (gl.checkIfLost()) {
 
-            gl.makeMove(finalDirection);
+                }
+            } catch (Exception e) {
+                Log.e("fling", e.toString());
+                for (StackTraceElement ste : e.getStackTrace()) {
+                    Log.e("fling", ste.toString());
+                }
+            }
             return true;
         }
     }

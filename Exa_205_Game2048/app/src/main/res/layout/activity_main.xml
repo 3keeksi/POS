@@ -10,9 +10,9 @@
     tools:context=".MainActivity">
 
     <RelativeLayout
+        android:id="@+id/rlTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
         <TextView
@@ -49,160 +49,181 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <TableLayout
-        android:id="@+id/tlContainer"
+    <FrameLayout
+        android:id="@+id/flTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rlTop"
+        android:layout_marginVertical="40dp">
+
+        <TableLayout
+            android:id="@+id/tlContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tile">
+
+            <TableRow
+                android:id="@+id/tr1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btNum1"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum2"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum3"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum4"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tr2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btNum5"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum6"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum7"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum8"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tr3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btNum9"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum10"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum11"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum12"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tr4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/btNum13"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum14"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum15"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/btNum16"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="0.25"
+                    android:textSize="25sp" />
+
+            </TableRow>
+
+        </TableLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flDir"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:background="@drawable/tile">
+        android:layout_below="@id/flTable"
+        android:layout_alignParentBottom="true">
 
-        <TableRow
-            android:id="@+id/tr1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btNum1"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum2"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum3"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum4"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tr2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btNum5"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum6"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum7"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum8"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tr3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btNum9"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum10"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum11"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum12"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/tr4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <Button
-                android:id="@+id/btNum13"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum14"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum15"
-                android:layout_height="match_parent"
-                android:layout_marginVertical="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-            <Button
-                android:id="@+id/btNum16"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="0.25"
-                android:textSize="25sp" />
-
-        </TableRow>
-
-    </TableLayout>
+        <ImageView
+            android:id="@+id/ivDir"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center" />
+    </FrameLayout>
 </RelativeLayout>
