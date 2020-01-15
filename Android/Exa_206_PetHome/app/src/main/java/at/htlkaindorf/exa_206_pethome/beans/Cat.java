@@ -16,4 +16,20 @@ public class Cat extends Pet {
         this.color = color;
         this.pictureUri = pictureUri;
     }
+
+    public CatColor getColor() {
+        return color;
+    }
+
+    public void setColor(CatColor color) {
+        this.color = color;
+    }
+
+    public Uri getPictureUri() {
+        return pictureUri;
+    }
+
+    public void setPictureUri(Uri pictureUri) {
+        this.pictureUri = pictureUri;
+    }
 }

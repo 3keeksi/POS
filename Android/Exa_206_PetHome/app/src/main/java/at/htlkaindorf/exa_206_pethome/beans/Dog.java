@@ -12,4 +12,12 @@ public class Dog extends Pet {
         super(name, dateOfBirth, gender);
         this.size = size;
     }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(Size size) {
+        this.size = size;
+    }
 }
