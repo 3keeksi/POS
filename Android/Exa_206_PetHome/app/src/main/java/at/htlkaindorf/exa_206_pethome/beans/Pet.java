@@ -10,6 +10,9 @@ public class Pet implements Serializable {
     private LocalDate dateOfBirth;
     private Gender gender;
 
+    public Pet() {
+    }
+
     public Pet(String name, LocalDate dateOfBirth, Gender gender) {
         this.name = name;
         this.dateOfBirth = dateOfBirth;

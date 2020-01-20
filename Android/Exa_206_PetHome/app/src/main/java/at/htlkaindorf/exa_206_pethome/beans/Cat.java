@@ -1,7 +1,10 @@
 package at.htlkaindorf.exa_206_pethome.beans;
 
 import android.net.Uri;
+import android.util.Log;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
 import java.time.LocalDate;
 
 import at.htlkaindorf.exa_206_pethome.enums.CatColor;
@@ -10,6 +13,10 @@ import at.htlkaindorf.exa_206_pethome.enums.Gender;
 public class Cat extends Pet {
     private CatColor color;
     private transient Uri pictureUri;
+
+    public Cat() {
+        super();
+    }
 
     public Cat(String name, LocalDate dateOfBirth, Gender gender, CatColor color, Uri pictureUri) {
         super(name, dateOfBirth, gender);
@@ -31,5 +38,15 @@ public class Cat extends Pet {
 
     public void setPictureUri(Uri pictureUri) {
         this.pictureUri = pictureUri;
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(pictureUri.toString());
+    }
+
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        pictureUri = Uri.parse((String) in.readObject());
     }
 }
