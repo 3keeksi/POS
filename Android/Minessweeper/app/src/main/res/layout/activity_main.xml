@@ -28,7 +28,6 @@
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:background="@drawable/btn"
-            android:backgroundTint="@color/colorAccent"
             android:gravity="center"
             android:text="RESET" />
 
@@ -77,26 +76,22 @@
 
             <ImageButton
                 android:id="@+id/imageButton"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="5dp"
-                android:background="@drawable/btn"
-                android:backgroundTint="@color/colorAccent"
+                android:background="@drawable/normal_btn"
                 android:foregroundGravity="center"
-                android:src="@drawable/point"
                 tools:srcCompat="@tools:sample/avatars[1]" />
 
             <ImageButton
                 android:id="@+id/imageButton3"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="5dp"
-                android:background="@drawable/btn"
-                android:backgroundTint="@color/colorAccent"
+                android:background="@drawable/flag_btn"
                 android:foregroundGravity="center"
-                android:src="@drawable/flag"
                 tools:srcCompat="@tools:sample/avatars[15]" />
 
         </LinearLayout>
