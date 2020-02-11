@@ -82,3 +82,5 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+/Java/Netbeans/BSP_Development/nbproject/private/
+/Java/Netbeans/BSP_Uhrzeitanzeige/nbproject/private/

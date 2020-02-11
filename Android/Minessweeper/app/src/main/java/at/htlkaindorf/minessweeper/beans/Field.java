@@ -1,16 +1,20 @@
 package at.htlkaindorf.minessweeper.beans;
 
-import java.util.Objects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.IntFunction;
 
 public class Field {
+    private List<Integer[]> emptyNeighbours;
     private boolean bomb;
     private int nearBombs;
-    private boolean discovered;
+    private FieldState state;
 
-    public Field(boolean bomb, int nearBombs, boolean discovered) {
-        this.bomb = isBomb;
-        this.nearBombs = nearBombs;
-        this.discovered = discovered;
+    public Field() {
+        this.bomb = false;
+        this.nearBombs = 0;
+        this.state = FieldState.NOT_DISCOVERED;
+        this.emptyNeighbours = new ArrayList<>();
     }
 
     public boolean isBomb() {
@@ -29,26 +33,19 @@ public class Field {
         this.nearBombs = nearBombs;
     }
 
-    public boolean isDiscovered() {
-        return discovered;
+    public FieldState getState() {
+        return state;
     }
 
-    public void setDiscovered(boolean discovered) {
-        this.discovered = discovered;
+    public void setState(FieldState state) {
+        this.state = state;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Field field = (Field) o;
-        return isBomb() == field.isBomb() &&
-                getNearBombs() == field.getNearBombs() &&
-                isDiscovered() == field.isDiscovered();
+    public List<Integer[]> getEmpty() {
+        return emptyNeighbours;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(isBomb(), getNearBombs(), isDiscovered());
+    public void setEmpty(List<Integer[]> empty) {
+        this.emptyNeighbours = empty;
     }
 }
