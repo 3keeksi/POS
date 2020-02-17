@@ -87,7 +87,7 @@ public class TimePanel extends JPanel implements Runnable {
         if (components[0].getBounds().width == 0) return;
         int width = Main.WIDTH - components[0].getBounds().width;
 
-        System.out.println(width + "");
+        System.out.println(components[0].getBounds().width + "");
 
         width /= 8;
         int height = width / 11 * 18;

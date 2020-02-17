@@ -14,8 +14,8 @@ import java.awt.Dimension;
 public class Main extends javax.swing.JFrame {
 
     private Thread localThread;
-    public static final int HEIGHT = 300;
-    public static final int WIDTH = 600;
+    public static int HEIGHT = 300;
+    public static int WIDTH = 600;
 
     /**
      * Creates new form Main
@@ -63,7 +63,7 @@ public class Main extends javax.swing.JFrame {
     private void onShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_onShown
         TimePanel local = (TimePanel) localPanel;
         local.init(true);
-//        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 //        this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
         this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
         localThread = new Thread((Runnable) local);
@@ -72,6 +72,8 @@ public class Main extends javax.swing.JFrame {
 
     private void onResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_onResized
         TimePanel local = (TimePanel) localPanel;
+        WIDTH = this.getWidth();
+        HEIGHT = this.getHeight();
         local.resize();
     }//GEN-LAST:event_onResized
 
