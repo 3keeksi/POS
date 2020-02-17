@@ -5,11 +5,17 @@
  */
 package gui;
 
+import java.awt.Dimension;
+
 /**
  *
  * @author crether
  */
 public class Main extends javax.swing.JFrame {
+
+    private Thread localThread;
+    public static final int HEIGHT = 300;
+    public static final int WIDTH = 600;
 
     /**
      * Creates new form Main
@@ -27,21 +33,47 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        localPanel = new TimePanel();
+        pa2 = new TimePanel();
+        pa3 = new TimePanel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                onResized(evt);
+            }
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                onShown(evt);
+            }
+        });
+        getContentPane().setLayout(new java.awt.GridLayout(3, 1));
+
+        localPanel.setLayout(new javax.swing.BoxLayout(localPanel, javax.swing.BoxLayout.X_AXIS));
+        getContentPane().add(localPanel);
+
+        pa2.setLayout(new javax.swing.BoxLayout(pa2, javax.swing.BoxLayout.X_AXIS));
+        getContentPane().add(pa2);
+
+        pa3.setLayout(new javax.swing.BoxLayout(pa3, javax.swing.BoxLayout.X_AXIS));
+        getContentPane().add(pa3);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void onShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_onShown
+        TimePanel local = (TimePanel) localPanel;
+        local.init(true);
+//        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+//        this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
+        this.setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        localThread = new Thread((Runnable) local);
+        localThread.start();
+    }//GEN-LAST:event_onShown
+
+    private void onResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_onResized
+        TimePanel local = (TimePanel) localPanel;
+        local.resize();
+    }//GEN-LAST:event_onResized
 
     /**
      * @param args the command line arguments
@@ -79,5 +111,8 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel localPanel;
+    private javax.swing.JPanel pa2;
+    private javax.swing.JPanel pa3;
     // End of variables declaration//GEN-END:variables
 }
