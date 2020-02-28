@@ -5,7 +5,6 @@
  */
 package gui;
 
-import com.sun.org.apache.bcel.internal.generic.ILOAD;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
