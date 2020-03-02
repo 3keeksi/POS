@@ -12,7 +12,7 @@ package conprod;
  */
 public class Launcher {
     public static void main(String[] args) {
-        Stack stack = new Stack(5); 
+        Stack stack = new Stack(5);
         int cnt = 100;
         Producer producer = new Producer(stack, cnt);
         Consumer consumer = new Consumer(stack, cnt);

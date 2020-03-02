@@ -39,6 +39,7 @@ public class TimePanel extends JPanel implements Runnable {
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm:ss");
     private DigitLabel[] labels = new DigitLabel[8];
     private static final int TIMEZONE_WIDTH = 200;
+    private ClockLabel clock;
     TimePanel panel = this;
 
     public TimePanel() {
@@ -48,12 +49,8 @@ public class TimePanel extends JPanel implements Runnable {
             labels[i] = label;
             this.add(label);
         }
-//        this.addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent ce) {
-//                ((TimePanel)ce.getComponent()).resize();
-//            }
-//        });
+//        this.clock = new ClockLabel(null);
+//        this.add(clock);
     }
 
     public void init(ZoneId zone) {
@@ -67,10 +64,14 @@ public class TimePanel extends JPanel implements Runnable {
             if (zone == null) {
                 chars = new char[8];
                 Arrays.fill(chars, '0');
+//                clock.setTime(null);
             } else {
                 time = LocalTime.now(zone);
                 chars = DTF.format(time).toCharArray();
+//                clock.setTime(time);
+//                System.out.println("nibba");
             }
+//            clock.repaint();
             for (int i = 0; i < labels.length; i++) {
                 labels[i].setValue(chars[i]);
                 labels[i].repaint();
@@ -90,15 +91,23 @@ public class TimePanel extends JPanel implements Runnable {
         if (components.length < 1) {
             return;
         }
-        int w = width - components[0].getBounds().width;
+        int clockPx = 0;
+        
+        int w = width;
 
-        width /= 8;
-        int height = width / 11 * 18;
+        w /= 8;
+        int height = w / 11 * 18;
 
         for (DigitLabel label : labels) {
-            label.setPreferredSize(new Dimension(width, height));
-            label.setMaximumSize(new Dimension(width, height));
-            label.setMinimumSize(new Dimension(width, height));
+            label.setPreferredSize(new Dimension(w, height));
+            label.setMaximumSize(new Dimension(w, height));
+            label.setMinimumSize(new Dimension(w, height));
+        }
+
+        if (clock != null) {
+            clock.setPreferredSize(new Dimension(clockPx, clockPx));
+            clock.setMaximumSize(new Dimension(clockPx, clockPx));
+            clock.setMinimumSize(new Dimension(clockPx, clockPx));
         }
         this.revalidate();
         this.repaint();
