@@ -8,6 +8,7 @@ package gui;
 import beans.Account;
 import bl.AccountUser;
 import bl.UserListModel;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -17,15 +18,15 @@ import javax.swing.JOptionPane;
  */
 public class Main extends javax.swing.JFrame {
     private UserListModel model;
-    private Account account;
+    private Account account = null;
+    private List<Thread> threads = new ArrayList<>();
 
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
-        account = new Account(lbAccount, 0.);
-        model = new UserListModel(account, epLog);
+        model = new UserListModel(account, taLogger);
         liUsers.setModel(model);
     }
 
@@ -47,8 +48,8 @@ public class Main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         liUsers = new javax.swing.JList<>();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        epLog = new javax.swing.JEditorPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taLogger = new javax.swing.JTextArea();
 
         miAdd.setText("add user");
         miAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -91,11 +92,13 @@ public class Main extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.LINE_START);
 
-        epLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Log output"));
-        epLog.setComponentPopupMenu(popLog);
-        jScrollPane2.setViewportView(epLog);
+        taLogger.setColumns(20);
+        taLogger.setRows(5);
+        taLogger.setBorder(javax.swing.BorderFactory.createTitledBorder("Logger"));
+        taLogger.setComponentPopupMenu(popLog);
+        jScrollPane3.setViewportView(taLogger);
 
-        jPanel1.add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        jPanel1.add(jScrollPane3, java.awt.BorderLayout.CENTER);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
@@ -103,24 +106,37 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUser
-        String name = JOptionPane.showInputDialog("user");
-        AccountUser user = new AccountUser(name, account, epLog);
-        model.addUser(user);
+        String result = JOptionPane.showInputDialog("Add user | Enter username");
+        if(result.isEmpty()){
+            return;
+        }
+        AccountUser user = new AccountUser(result, account, taLogger);
+        if(model.exists(user)){
+            return;
+        }
+        model.add(user);
     }//GEN-LAST:event_addUser
 
     private void testAccount(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testAccount
-        // TODO add your handling code here:
-        List<AccountUser> selected = liUsers.getSelectedValuesList();
-        for (AccountUser user : selected) {
-            System.out.println("asjdhvshjsg");
-            Thread thread = new Thread(user);
-            thread.start();
+        if(account == null){
+            accountCreate(null);
         }
+        lbAccount.setText("");
+        threads.clear();
+        List<AccountUser> selectedUsers = liUsers.getSelectedValuesList();
+        selectedUsers.forEach(user -> {
+            user.setAcc(account);
+            
+            Thread t = new Thread(user, user.getName());
+            t.setPriority(Thread.NORM_PRIORITY + 1);
+            threads.add(t);
+            t.start();
+        });
     }//GEN-LAST:event_testAccount
 
     private void accountCreate(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_accountCreate
-        account.setBalance(50);
-        epLog.setText("account created");
+        this.account = new Account(lbAccount, 50.);
+        taLogger.setText("account created");
     }//GEN-LAST:event_accountCreate
 
     /**
@@ -159,10 +175,9 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JEditorPane epLog;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lbAccount;
     private javax.swing.JList<AccountUser> liUsers;
     private javax.swing.JMenuItem miAdd;
@@ -170,5 +185,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem miTest;
     private javax.swing.JPopupMenu popLog;
     private javax.swing.JPopupMenu popUsers;
+    private javax.swing.JTextArea taLogger;
     // End of variables declaration//GEN-END:variables
 }

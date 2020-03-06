@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JEditorPane;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -21,59 +22,58 @@ public class AccountUser implements Runnable {
 
     private String name;
     private Account acc;
-    private JEditorPane pane;
+    private JTextArea pane;
     private static Random rand = new Random();
     private AtomicInteger waitCnt = new AtomicInteger(0);
 
-    public AccountUser(String name, Account acc, JEditorPane pane) {
+    public AccountUser(String name, Account acc, JTextArea pane) {
         this.name = name;
         this.acc = acc;
         this.pane = pane;
     }
 
     @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
     public void run() {
         int deadlockCount = 0;
-        for (int i = 0; i < 10; i++) {
+        for(int i = 0; i < 10; i++){
             deadlockCount = 0;
-            System.out.println("reeee");
-            int val = rand.nextInt(40) + 10;
-            String makes = "deposits";
-            if (rand.nextBoolean()) {
-                val *= -1;
-                makes = "withdraws";
-            }
-            synchronized (acc) {
-                while ((acc.getBalance() + val) < 0 && deadlockCount < 3) {
-                    try {
-                        append("is waiting");
-                        deadlockCount++;
-                        acc.wait(2000);
-                    } catch (InterruptedException ex) {
-//                        Logger.getLogger(AccountUser.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+            try {
+                pane.append(name + " has started\n");
+                int amount = rand.nextInt(41) + 10;
                 
-                if(deadlockCount >= 3){
+                amount = rand.nextBoolean() ? amount : amount * (-1);
+                
+                synchronized(acc){
+                    pane.append("Trying to make transaction --> " + amount + "\n");
+                    while((acc.getBalance() + amount) < 0 && deadlockCount < 3){
+                        try {
+                            pane.append(name + " is waiting now\n");
+                            acc.wait(2000);
+                            deadlockCount++;
+                            pane.append(name + " has finished waiting\n");
+                        } catch (InterruptedException ex) {}
+                    }
+                    
+                    if(deadlockCount >= 3){
                         i--;
                         continue;
                     }
-                acc.transaction(val);
-                makesTransaction(makes, val);
-                acc.notifyAll();
-            }
+                    
+                    acc.performTransaction(amount);
+                    pane.append(name + " performed transaction: " + amount + "\n");
+                    acc.notifyAll();
+                }
+                
+                Thread.sleep(rand.nextInt(1000) + 1);
+            } catch (InterruptedException ex) {}
         }
+        pane.append(name + " finished");
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 67 * hash + Objects.hashCode(this.name);
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
@@ -93,14 +93,28 @@ public class AccountUser implements Runnable {
             return false;
         }
         return true;
+    } 
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 
-    private void makesTransaction(String makes, double amount) {
-        pane.setText(String.format("%s\n%s%s: %f", pane.getText(), name, makes, amount));
+    public String getName() {
+        return name;
     }
 
-    private void append(String str) {
-        pane.setText(pane.getText() + "\n" + str);
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public Account getAcc() {
+        return acc;
+    }
+
+    public void setAcc(Account acc) {
+        this.acc = acc;
+    }
+    
+    
 }

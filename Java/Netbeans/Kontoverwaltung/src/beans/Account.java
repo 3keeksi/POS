@@ -22,28 +22,16 @@ public class Account {
         this.balance = balance;
     }
 
-    public boolean transaction(double amount) {
-        if (amount < 0 && balance - amount < 0) {
-            return false;
-        } else if (amount > 0) {
-            balance+=amount;
-        } else {
-            balance-=amount;
-        }
-        setText();
-        return true;
-    }
-
-    public void setBalance(double balance) {
-        this.balance = balance;
-        setText();
-    }
-    
-    public void setText() {
-        label.setText(String.format("%.02f", balance));
-    }
-
     public double getBalance() {
         return balance;
+    }
+    
+    public void performTransaction(int amount){
+        if(balance + amount < 0){
+            throw new RuntimeException("Balance cannot be negative");
+        }
+        
+        balance += amount;
+        label.setText(String.format("%.2f", balance));
     }
 }
