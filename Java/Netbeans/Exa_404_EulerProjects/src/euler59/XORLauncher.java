@@ -39,8 +39,8 @@ public class XORLauncher {
     public static List<String> words = new ArrayList<>();
 
     public static void solveXOR() throws FileNotFoundException {
-        input = IOHelper.getInput();
-        words = IOHelper.getWords();
+        input = IOHandler.getInput();
+        words = IOHandler.getWords();
 
         ExecutorService pool = Executors.newFixedThreadPool(4);
         CompletionService<Map.Entry<Integer[], Boolean>> service = new ExecutorCompletionService<>(pool);

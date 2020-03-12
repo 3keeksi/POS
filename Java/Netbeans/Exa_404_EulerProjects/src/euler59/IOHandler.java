@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author crether
  */
-public class IOHelper {
+public class IOHandler {
     public static final Path input = Paths.get(System.getProperty("user.dir"), "src", "euler59", "input.txt");
     public static final Path words = Paths.get(System.getProperty("user.dir"), "src", "euler59", "words.txt");
     
