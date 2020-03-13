@@ -22,36 +22,36 @@ import java.util.logging.Logger;
  * @author crether
  */
 public class SudokuLauncher {
-    
-    public static List<Integer[][]> boards;
-    
-    public static void solveSudokus() throws IOException {
-        boards = IOHandler.getInput();
-        ExecutorService pool = Executors.newFixedThreadPool(4);
-        CompletionService<Integer> service = new ExecutorCompletionService<>(pool);
-        for (Integer[][] board : boards) {
-            service.submit(new SudokuWorker(board));
-        }
-        pool.shutdown();
-        
-        Integer sum = 0;
-        while (!pool.isTerminated()) {
-            try {
-                Future<Integer> future = service.take();
-                Integer val = future.get();
-                sum += val;
-            } catch (InterruptedException | ExecutionException ex) {
-                Logger.getLogger(SudokuLauncher.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        System.out.println(sum);
-    }
-    
-    public static void main(String[] args) {
-        try {
-            solveSudokus();
-        } catch (IOException ex) {
-            Logger.getLogger(SudokuLauncher.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
+	public static List<Integer[][]> boards;
+
+	public static void solveSudokus() throws IOException {
+		boards = IOHandler.getInput();
+		ExecutorService pool = Executors.newFixedThreadPool(4);
+		CompletionService<Integer> service = new ExecutorCompletionService<>(pool);
+		for (Integer[][] board : boards) {
+			service.submit(new SudokuWorker(board));
+		}
+		pool.shutdown();
+
+		Integer sum = 0;
+		while (!pool.isTerminated()) {
+			try {
+				Future<Integer> future = service.take();
+				Integer val = future.get();
+				sum += val;
+			} catch (InterruptedException | ExecutionException ex) {
+				Logger.getLogger(SudokuLauncher.class.getName()).log(Level.SEVERE, null, ex);
+			}
+		}
+		System.out.println(sum);
+	}
+
+	public static void main(String[] args) {
+		try {
+			solveSudokus();
+		} catch (IOException ex) {
+			Logger.getLogger(SudokuLauncher.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
 }

@@ -20,29 +20,30 @@ import java.util.stream.Collectors;
  * @author crether
  */
 public class IOHandler {
-    public static final Path input = Paths.get(System.getProperty("user.dir"), "src", "euler59", "input.txt");
-    public static final Path words = Paths.get(System.getProperty("user.dir"), "src", "euler59", "words.txt");
-    
-    public static List<Integer> getInput() throws FileNotFoundException {
-        List<Integer> bytes = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(input.toFile()));
-        br.lines()
-                .map(l -> l.split(","))
-                .forEach(i -> Arrays.stream(i)
-                        .map(Integer::parseInt)
-                        .forEach(bytes::add));
-        return bytes;
-    }
-    
-    public static List<String> getWords() throws FileNotFoundException {
-        List<String> list;
-        BufferedReader br = new BufferedReader(new FileReader(words.toFile()));
-        
-        list = br.lines()
-                .skip(1)
-                .collect(Collectors.toList());
-        
-        return list;
-    }
-    
+
+	public static final Path input = Paths.get(System.getProperty("user.dir"), "src", "euler59", "input.txt");
+	public static final Path words = Paths.get(System.getProperty("user.dir"), "src", "euler59", "words.txt");
+
+	public static List<Integer> getInput() throws FileNotFoundException {
+		List<Integer> bytes = new ArrayList<>();
+		BufferedReader br = new BufferedReader(new FileReader(input.toFile()));
+		br.lines()
+				.map(l -> l.split(","))
+				.forEach(i -> Arrays.stream(i)
+				.map(Integer::parseInt)
+				.forEach(bytes::add));
+		return bytes;
+	}
+
+	public static List<String> getWords() throws FileNotFoundException {
+		List<String> list;
+		BufferedReader br = new BufferedReader(new FileReader(words.toFile()));
+
+		list = br.lines()
+				.skip(1)
+				.collect(Collectors.toList());
+
+		return list;
+	}
+
 }

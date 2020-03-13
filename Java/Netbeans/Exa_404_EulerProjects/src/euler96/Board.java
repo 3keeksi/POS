@@ -10,29 +10,29 @@ package euler96;
  * @author crether
  */
 public class Board {
-    
-    private int free;
-    private Integer[][] board;
 
-    public Board(int free, Integer[][] board) {
-        this.free = free;
-        this.board = board;
-    }
+	private int free;
+	private Integer[][] board;
 
-    public int getFree() {
-        return free;
-    }
+	public Board(int free, Integer[][] board) {
+		this.free = free;
+		this.board = board;
+	}
 
-    public void setFree(int free) {
-        this.free = free;
-    }
+	public int getFree() {
+		return free;
+	}
 
-    public Integer[][] getBoard() {
-        return board;
-    }
+	public void setFree(int free) {
+		this.free = free;
+	}
 
-    public void setBoard(Integer[][] board) {
-        this.board = board;
-    }
-    
+	public Integer[][] getBoard() {
+		return board;
+	}
+
+	public void setBoard(Integer[][] board) {
+		this.board = board;
+	}
+
 }

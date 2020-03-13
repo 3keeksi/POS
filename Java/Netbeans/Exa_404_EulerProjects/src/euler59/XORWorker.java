@@ -47,7 +47,7 @@ public class XORWorker implements Callable<Integer> {
 				mishaps++;
 			}
 		}
-		if (count >= converted.split(" ").length*0.5) {
+		if (count >= converted.split(" ").length * 0.5) {
 			return sum;
 		}
 		return 0;

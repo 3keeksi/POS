@@ -21,29 +21,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author crether
  */
 public class IOHandler {
-    private static Path input = Paths.get(System.getProperty("user.dir"), "src", "euler96", "input.txt");
-    
-    public static List<Integer[][]> getInput() throws FileNotFoundException, IOException {
-        List<Integer[][]> list = new ArrayList<>();
-        BufferedReader br = new BufferedReader(new FileReader(input.toFile()));
-        String line = "";
-        Integer[][] board;
-        final AtomicInteger free = new AtomicInteger(0);
-        
-        while((line = br.readLine()) != null) {
-            board = new Integer[9][9];
-            for (int i = 0; i < 9; i++) {
-                line = br.readLine();
-                board[i] = line.chars().map((operand) -> {
-                    return Integer.parseInt(String.valueOf((char)operand));
-                }).boxed().toArray((value) -> {
-                    if (value == 0) free.addAndGet(1);
-                    return new Integer[value]; //To change body of generated lambdas, choose Tools | Templates.
-                });
-            }
-            list.add(board);
-            free.set(0);
-        }
-        return list;
-    }
+
+	private static Path input = Paths.get(System.getProperty("user.dir"), "src", "euler96", "input.txt");
+
+	public static List<Integer[][]> getInput() throws FileNotFoundException, IOException {
+		List<Integer[][]> list = new ArrayList<>();
+		BufferedReader br = new BufferedReader(new FileReader(input.toFile()));
+		String line = "";
+		Integer[][] board;
+		final AtomicInteger free = new AtomicInteger(0);
+
+		while ((line = br.readLine()) != null) {
+			board = new Integer[9][9];
+			for (int i = 0; i < 9; i++) {
+				line = br.readLine();
+				board[i] = line.chars().map((operand) -> {
+					return Integer.parseInt(String.valueOf((char) operand));
+				}).boxed().toArray((value) -> {
+					if (value == 0) {
+						free.addAndGet(1);
+					}
+					return new Integer[value]; //To change body of generated lambdas, choose Tools | Templates.
+				});
+			}
+			list.add(board);
+			free.set(0);
+		}
+		return list;
+	}
 }
