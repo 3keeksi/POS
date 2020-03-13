@@ -43,7 +43,7 @@ public class XORLauncher {
         words = IOHandler.getWords();
 
         ExecutorService pool = Executors.newFixedThreadPool(4);
-        CompletionService<Map.Entry<Integer[], Boolean>> service = new ExecutorCompletionService<>(pool);
+        CompletionService<Integer> service = new ExecutorCompletionService<>(pool);
         for (int i1 = (int) 'a'; i1 <= (int) 'z'; i1++) {
             for (int i2 = (int) 'a'; i2 <= (int) 'z'; i2++) {
                 for (int i3 = (int) 'a'; i3 <= (int) 'z'; i3++) {
@@ -53,20 +53,14 @@ public class XORLauncher {
         }
         pool.shutdown();
 
-        Set<String> working = new HashSet<>();
         while (!pool.isTerminated()) {
             try {
-                Future<Map.Entry<Integer[], Boolean>> future = service.take();
-                Map.Entry<Integer[], Boolean> entry = future.get();
-                if (entry.getValue()) {
-                    String k = Arrays.stream(entry.getKey()).map(t -> String.valueOf((char) t.intValue())).collect(Collectors.joining());
-                    Path path = Paths.get(System.getProperty("user.dir"), "src", "euler59", "out", k + ".txt");
-                    BufferedReader br = new BufferedReader(new FileReader(path.toFile()));
-                    String line = br.readLine();
-                    int index = line.indexOf('/');
-                    System.out.println(line.substring(0, index));
+                Future<Integer> future = service.take();
+                Integer entry = future.get();
+                if (entry > 0) {
+                    System.out.println(entry+"");
                 }
-            } catch (InterruptedException | ExecutionException | IOException ex) {
+            } catch (InterruptedException | ExecutionException ex) {
                 Logger.getLogger(XORLauncher.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

@@ -5,7 +5,6 @@
  */
 package euler96;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -15,6 +14,7 @@ import java.util.concurrent.Callable;
 public class SudokuWorker implements Callable<Integer> {
 
     private Integer[][] board;
+    private boolean finished = false;
 
     public SudokuWorker(Integer[][] board) {
         this.board = board;
@@ -23,7 +23,7 @@ public class SudokuWorker implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         solve();
-        Integer sum = board[0][0] + board[0][1] + board[0][2];
+        Integer sum = board[0][0]*100 + board[0][1]*10 + board[0][2];
         return sum;
     }
 
@@ -35,6 +35,7 @@ public class SudokuWorker implements Callable<Integer> {
                         if (isPossible(y, x, i)) {
                             board[y][x] = i;
                             solve();
+                            if(this.finished) return;
                             board[y][x] = 0;
                         }
                     }
@@ -42,15 +43,16 @@ public class SudokuWorker implements Callable<Integer> {
                 }
             }
         }
+        this.finished = true;
     }
 
     public boolean isPossible(int y, int x, int num) {
-        for (int xMov = 0; xMov < 9; xMov++) {
+        for (int xMov = 0; xMov < board[y].length; xMov++) {
             if (board[y][xMov] == num) {
                 return false;
             }
         }
-        for (int yMov = 0; yMov < 9; yMov++) {
+        for (int yMov = 0; yMov < board.length; yMov++) {
             if (board[yMov][x] == num) {
                 return false;
             }

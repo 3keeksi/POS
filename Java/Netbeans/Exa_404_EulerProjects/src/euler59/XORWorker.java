@@ -17,42 +17,40 @@ import java.util.stream.Collectors;
  *
  * @author crether
  */
-public class XORWorker implements Callable<Map.Entry<Integer[], Boolean>> {
+public class XORWorker implements Callable<Integer> {
 
-    private Integer[] key;
+	private Integer[] key;
 
-    public XORWorker(Integer[] key) {
-        this.key = key;
+	public XORWorker(Integer[] key) {
+		this.key = key;
 
-    }
+	}
 
-    @Override
-    public Map.Entry<Integer[], Boolean> call() throws Exception {
-        int count = 0;
-        long sum = 0;
-        String converted = "";
-        for (Integer ch : XORLauncher.input) {
-            int XORed = ch ^ key[count % 3];
-            count++;
-            sum+=XORed;
-            converted += (char) XORed;
-        }
-        String k = Arrays.stream(key).map(t -> String.valueOf((char) t.intValue())).collect(Collectors.joining());
-        Path out = Paths.get(System.getProperty("user.dir"), "src", "euler59", "out", k + ".txt");
+	@Override
+	public Integer call() throws Exception {
+		int count = 0;
+		int sum = 0;
+		String converted = "";
+		for (Integer ch : XORLauncher.input) {
+			int XORed = ch ^ key[count % 3];
+			count++;
+			sum += XORed;
+			converted += (char) XORed;
+		}
 
-        count = 0;
-        for (String string : converted.split(" ")) {
-            if (XORLauncher.words.contains(string)) {
-                count++;
-            }
-        }
-        if (count >= 30) {
-            FileWriter fw = new FileWriter(out.toFile());
-            fw.write(sum+"/"+converted);
-            fw.close();
-            return Map.entry(key, true);
-        }
-        return Map.entry(key, false);
-    }
+		count = 0;
+		int mishaps = 0;
+		for (String string : converted.split(" ")) {
+			if (XORLauncher.words.contains(string)) {
+				count++;
+			} else {
+				mishaps++;
+			}
+		}
+		if (count >= converted.split(" ").length*0.5) {
+			return sum;
+		}
+		return 0;
+	}
 
 }
