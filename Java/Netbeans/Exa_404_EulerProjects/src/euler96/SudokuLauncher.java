@@ -29,6 +29,7 @@ public class SudokuLauncher {
 		boards = IOHandler.getInput();
 		ExecutorService pool = Executors.newFixedThreadPool(4);
 		CompletionService<Integer> service = new ExecutorCompletionService<>(pool);
+		// creates a SudokuWorker for every Sudoku board
 		for (Integer[][] board : boards) {
 			service.submit(new SudokuWorker(board));
 		}
@@ -37,6 +38,7 @@ public class SudokuLauncher {
 		Integer sum = 0;
 		while (!pool.isTerminated()) {
 			try {
+				// just gets the result of the SudokuWorker and adds it so the sum
 				Future<Integer> future = service.take();
 				Integer val = future.get();
 				sum += val;

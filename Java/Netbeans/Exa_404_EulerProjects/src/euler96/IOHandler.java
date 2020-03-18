@@ -24,6 +24,12 @@ public class IOHandler {
 
 	private static Path input = Paths.get(System.getProperty("user.dir"), "src", "euler96", "input.txt");
 
+	/**
+	 * parses the input file
+	 * @return a list of two-dimensional Integer Arrays = the Sudoku boards
+	 * @throws FileNotFoundException
+	 * @throws IOException 
+	 */
 	public static List<Integer[][]> getInput() throws FileNotFoundException, IOException {
 		List<Integer[][]> list = new ArrayList<>();
 		BufferedReader br = new BufferedReader(new FileReader(input.toFile()));

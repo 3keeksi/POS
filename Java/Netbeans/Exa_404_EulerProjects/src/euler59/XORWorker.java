@@ -5,15 +5,10 @@
  */
 package euler59;
 
-import java.io.FileWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 /**
+ * XORWorker does a decryption with the key it is given
  *
  * @author crether
  */
@@ -23,7 +18,6 @@ public class XORWorker implements Callable<Integer> {
 
 	public XORWorker(Integer[] key) {
 		this.key = key;
-
 	}
 
 	@Override
@@ -31,22 +25,24 @@ public class XORWorker implements Callable<Integer> {
 		int count = 0;
 		int sum = 0;
 		String converted = "";
+		// go through every 
 		for (Integer ch : XORLauncher.input) {
+			// xor the current integer and add it to the complete sum
 			int XORed = ch ^ key[count % 3];
 			count++;
 			sum += XORed;
+			// also add it to the String
 			converted += (char) XORed;
 		}
 
 		count = 0;
-		int mishaps = 0;
+		// count the known words in the string
 		for (String string : converted.split(" ")) {
 			if (XORLauncher.words.contains(string)) {
 				count++;
-			} else {
-				mishaps++;
 			}
 		}
+		// my criteria to make it count is that it knows at least half of the words
 		if (count >= converted.split(" ").length * 0.5) {
 			return sum;
 		}

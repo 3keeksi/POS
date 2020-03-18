@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- *
+ * XorLauncher just launches all the Worker Threads 
  * @author crether
  */
 public class XORLauncher {
@@ -44,6 +44,7 @@ public class XORLauncher {
 
 		ExecutorService pool = Executors.newFixedThreadPool(4);
 		CompletionService<Integer> service = new ExecutorCompletionService<>(pool);
+		// create a worker for every key
 		for (int i1 = (int) 'a'; i1 <= (int) 'z'; i1++) {
 			for (int i2 = (int) 'a'; i2 <= (int) 'z'; i2++) {
 				for (int i3 = (int) 'a'; i3 <= (int) 'z'; i3++) {

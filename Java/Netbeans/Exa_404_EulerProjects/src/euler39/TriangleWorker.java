@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 /**
- *
+ * TriangleWorker brute forces the solution
  * @author crether
  */
 public class TriangleWorker implements Callable<Set<Triple>> {
