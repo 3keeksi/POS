@@ -12,7 +12,7 @@ import java.util.Arrays;
  * @author crether
  */
 public class Triple {
-
+	
 	private int p;
 	private int[] triangle = new int[3];
 
