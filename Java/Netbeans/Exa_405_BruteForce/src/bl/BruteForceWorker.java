@@ -1,0 +1,101 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package bl;
+
+import beans.Person;
+import java.nio.CharBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.bind.DatatypeConverter;
+
+/**
+ *
+ * @author crether
+ */
+public class BruteForceWorker implements Callable<String> {
+
+    private Person person;
+    private int threadNo;
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm");
+    private MessageDigest md;
+
+    public BruteForceWorker(Person person, int threadNo) {
+        this.person = person;
+        this.threadNo = threadNo;
+        try {
+            // create a MD5 encrypter
+            this.md = MessageDigest.getInstance("MD5");
+        } catch (NoSuchAlgorithmException ex) {
+        }
+    }
+
+    @Override
+    public String call() throws Exception {
+        log("started working now");
+        if(md == null) {
+            log("the MD5 decrypter could not be created");
+            return "";
+        }
+        List<Character> chars = new ArrayList<>();
+        for (char i = 'a'; i <= 'z'; i++) {
+            chars.add(i);
+        }
+        for (char i = '0'; i <= '9'; i++) {
+            chars.add(i);
+        }
+        String passwd = "";
+        OUTER:
+        for (Character one : chars) {
+            for (Character two : chars) {
+                for (Character three : chars) {
+                    for (Character four : chars) {
+                        for (Character five : chars) {
+                            passwd = one.toString() + two.toString() + three.toString() + four.toString() + five.toString();
+                            if (solve(passwd))
+                                break OUTER;
+
+                            passwd = "";
+                        }
+                    }
+                }
+            }
+        }
+
+        if (passwd.length() == 0)
+            log("not cracked the password");
+        else
+            log("cracked a password: " + passwd);
+        log("finished");
+
+        return passwd;
+    }
+
+    private void log(String msg) {
+        System.out.format("[%s] Worker for Person #%d has %s!\n", DTF.format(LocalTime.now()), threadNo, msg);
+    }
+
+    public boolean solve(String passwd) {
+        // create the string to be hashed
+        String toHash = person.getFirstName() + person.getLastName() + passwd;
+        
+        byte[] bytes = md.digest(toHash.getBytes());
+
+        String hex = DatatypeConverter.printHexBinary(bytes).toLowerCase();
+        if (hex.equals(person.getHash()))
+            return true;
+
+        return false;
+    }
+
+}
