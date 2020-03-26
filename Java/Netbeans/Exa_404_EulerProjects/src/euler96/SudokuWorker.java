@@ -24,7 +24,7 @@ public class SudokuWorker implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        solve(0, 0);
+        solve(0);
         System.out.println(Arrays.toString(board[0]));
         //get the first three numbers
         Integer sum = board[0][0] * 100 + board[0][1] * 10 + board[0][2];
@@ -36,18 +36,17 @@ public class SudokuWorker implements Callable<Integer> {
      * (instead of going through everything)
      *
      * @param startY specifies the start point for the y coordinate
-     * @param startX specifies the start point for the x coordinate
      */
-    public void solve(int startY, int startX) {
+    public void solve(int startY) {
         for (int y = startY; y < board.length; y++) {
-            for (int x = startX; x < board[y].length; x++) {
+            for (int x = 0; x < board[y].length; x++) {
                 if (board[y][x] == 0) {
                     for (int i = 1; i < 10; i++) {
                         //check if it can place
                         if (isPossible(y, x, i)) {
                             // sets the number
                             board[y][x] = i;
-                            solve(y, x);
+                            solve(y);
                             if (this.finished)
                                 return;
                             // sets it to 0 again because the number before clearly doesn't work and through that it "backtracks"
