@@ -25,7 +25,6 @@ public class SudokuWorker implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         solve(0);
-        System.out.println(Arrays.toString(board[0]));
         //get the first three numbers
         Integer sum = board[0][0] * 100 + board[0][1] * 10 + board[0][2];
         return sum;
