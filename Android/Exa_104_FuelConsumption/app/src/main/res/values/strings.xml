@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">Exa_104_FuelConsumption</string>
-    <string name="title">Fuel Consumption</string>
-    <string name="fuelHint">Fuel in liter: </string>
-    <string name="distanceHint">Distance in km: </string>
-    <string name="calculateButton">CALCULATE</string>
-    <string name="illegal">Illegal Input</string>
-    <string name="consumptionFormat">Consumption: %.2f l/km</string>
-</resources>
