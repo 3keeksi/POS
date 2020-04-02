@@ -27,7 +27,7 @@ public class BruteForceWorker implements Callable<String> {
 
     private Person person;
     private int threadNo;
-    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm:ss");
     private MessageDigest md;
 
     public BruteForceWorker(Person person, int threadNo) {
@@ -43,8 +43,8 @@ public class BruteForceWorker implements Callable<String> {
     @Override
     public String call() throws Exception {
         log("started working now");
-        if(md == null) {
-            log("the MD5 decrypter could not be created");
+        if (md == null) {
+            log("not been able to create the MD5 decrypter");
             return "";
         }
         List<Character> chars = new ArrayList<>();
@@ -55,6 +55,7 @@ public class BruteForceWorker implements Callable<String> {
             chars.add(i);
         }
         String passwd = "";
+        long startTime = System.nanoTime();
         OUTER:
         for (Character one : chars) {
             for (Character two : chars) {
@@ -62,8 +63,9 @@ public class BruteForceWorker implements Callable<String> {
                     for (Character four : chars) {
                         for (Character five : chars) {
                             passwd = one.toString() + two.toString() + three.toString() + four.toString() + five.toString();
-                            if (solve(passwd))
+                            if (solve(passwd)) {
                                 break OUTER;
+                            }
 
                             passwd = "";
                         }
@@ -71,29 +73,49 @@ public class BruteForceWorker implements Callable<String> {
                 }
             }
         }
+        long endTime = System.nanoTime();
 
-        if (passwd.length() == 0)
+        // output the time taken
+        if (passwd.length() == 0) {
             log("not cracked the password");
-        else
-            log("cracked a password: " + passwd);
+        } else {
+            log(String.format("cracked a password: %s in %s",
+                    passwd, BruteForceWorker.getTime(startTime, endTime)));
+        }
         log("finished");
 
         return passwd;
     }
 
     private void log(String msg) {
-        System.out.format("[%s] Worker for Person #%d has %s!\n", DTF.format(LocalTime.now()), threadNo, msg);
+        System.out.format("[#%d - %s] Worker for %s %s has %s!\n",
+                threadNo, DTF.format(LocalTime.now()), person.getFirstName(), person.getLastName(), msg);
+    }
+
+    public static String getTime(long startTime, long endTime) {
+        // difference between endTime - startTime is the time it took in nanoseconds
+        long duration = endTime - startTime;
+        
+        // calculate the milliseconds
+        long ms = duration / 1_000_000L;
+        
+        //calculate the seconds
+        long seconds = ms / 1000L;
+        
+        //return the seconds/milliseconds
+        return String.format("%d seconds / %d milliseconds", seconds, ms);
     }
 
     public boolean solve(String passwd) {
         // create the string to be hashed
         String toHash = person.getFirstName() + person.getLastName() + passwd;
-        
+
         byte[] bytes = md.digest(toHash.getBytes());
 
         String hex = DatatypeConverter.printHexBinary(bytes).toLowerCase();
-        if (hex.equals(person.getHash()))
+        if (hex.equals(person.getHash())) {
             return true;
+        }
 
         return false;
     }

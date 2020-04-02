@@ -50,17 +50,18 @@ public class BruteForceManager {
         // magic to read in a valid number
         Integer input = 1;
         String rangeStr = "Enter a number from 1 to " + persons.size();
-        
+
         do {
-            if (input == null)
-                // if there was an exception before then it was not a Integer
+            if (input == null) // if there was an exception before then it was not a Integer
+            {
                 System.out.println("Invalid number! " + rangeStr);
-            else if (input <= 0)
+            } else if (input <= 0) {
                 System.out.println("Number is too low! " + rangeStr);
-            else if (input > persons.size())
+            } else if (input > persons.size()) {
                 System.out.println("Number is too high! " + rangeStr);
-            else
+            } else {
                 System.out.println(rangeStr);
+            }
             System.out.print("Enter the number of persons you want to crack: ");
             try {
                 Scanner s = new Scanner(System.in);
@@ -78,27 +79,33 @@ public class BruteForceManager {
 
         ExecutorService pool = Executors.newFixedThreadPool(4);
         CompletionService<String> service = new ExecutorCompletionService<>(pool);
+        long startTime = System.nanoTime();
+
         // creates a BruteForceWorker for every person
         for (int i = 0; i < input; i++) {
-            service.submit(new BruteForceWorker(persons.get(i), i+1));
+            service.submit(new BruteForceWorker(persons.get(i), i + 1));
         }
         pool.shutdown();
 
         // variable to count how many passwords actually got cracked
         int count = 0;
+        long lastCompletionTime = System.nanoTime();
         while (!pool.isTerminated()) {
             try {
                 Future<String> future = service.take();
                 String result = future.get();
-                if (result != null)
+                lastCompletionTime = System.nanoTime();
+                if (result != null) {
                     count++;
+                }
             } catch (InterruptedException | ExecutionException ex) {
             }
         }
 
         System.out.println("\n==============\n"
                 + "Result\n"
-                + String.format("%d password(s) cracked out of %d", count, input));
+                + "It took" + BruteForceWorker.getTime(startTime, lastCompletionTime) + "to crack\n"
+                + String.format("%d password(s) out of %d", count, input));
     }
 
     public static void main(String[] args) {
