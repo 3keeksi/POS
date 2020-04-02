@@ -89,14 +89,19 @@ public class BruteForceManager {
 
         // variable to count how many passwords actually got cracked
         int count = 0;
+        int finished = 0;
         long lastCompletionTime = System.nanoTime();
         while (!pool.isTerminated()) {
             try {
+                lastCompletionTime = System.nanoTime();
                 Future<String> future = service.take();
                 String result = future.get();
-                lastCompletionTime = System.nanoTime();
+                finished++;
                 if (result != null) {
                     count++;
+                }
+                if (finished == persons.size()) {
+                    pool.shutdownNow();
                 }
             } catch (InterruptedException | ExecutionException ex) {
             }

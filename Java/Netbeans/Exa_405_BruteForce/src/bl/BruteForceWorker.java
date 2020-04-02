@@ -62,6 +62,9 @@ public class BruteForceWorker implements Callable<String> {
                 for (Character three : chars) {
                     for (Character four : chars) {
                         for (Character five : chars) {
+                            if (Thread.interrupted()) {
+                                return "";
+                            }
                             passwd = one.toString() + two.toString() + three.toString() + four.toString() + five.toString();
                             if (solve(passwd)) {
                                 break OUTER;
