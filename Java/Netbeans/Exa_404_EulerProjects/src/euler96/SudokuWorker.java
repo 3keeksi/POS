@@ -6,6 +6,7 @@
 package euler96;
 
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 
 /**
@@ -37,7 +38,6 @@ public class SudokuWorker implements Callable<Integer> {
      * @param startY specifies the start point for the y coordinate
      */
     public void solve(int startY) {
-        for (int y = startY; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
                 if (board[y][x] == 0) {
                     for (int i = 1; i < 10; i++) {
