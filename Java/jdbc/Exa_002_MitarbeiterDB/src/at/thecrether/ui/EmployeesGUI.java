@@ -250,6 +250,7 @@ public class EmployeesGUI extends javax.swing.JFrame {
                     "There was an error when inserting the employee");
             System.out.println(ex.toString());
         }
+        aed.invalidate();
     }//GEN-LAST:event_onAddEmp
 
     /**

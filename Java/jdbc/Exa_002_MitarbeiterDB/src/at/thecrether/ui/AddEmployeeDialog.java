@@ -38,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 /**
@@ -66,13 +67,19 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
     public AddEmployeeDialog(Frame parent, int persNr) {
         super(parent, "Insert a Employee", true);
         this.persNr = persNr;
-        setMinimumSize(new Dimension(300, 0));
+        setMinimumSize(new Dimension(300, 420));
         panel = new JPanel();
-        panel.setMinimumSize(new Dimension(300, 0));
+        panel.setMinimumSize(new Dimension(300, 420));
         panel.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        gbc.gridx = 0;
+        gbc.gridy = currentY++;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1;
+        panel.add(new JLabel("Add an Employee!", SwingConstants.CENTER), gbc);
 
         // Surname box
         tfSurname = new JTextField(40);
@@ -108,23 +115,25 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
         gbc.gridy = currentY++;
         panel.add(spacer, gbc);
 
-        // button to confirm the adding
-        btAdd = new JButton("Add Employee");
-        btAdd.addActionListener(this);
-        gbc.gridwidth = 1;
-        gbc.gridx = 0;
-        gbc.gridy = ++currentY;
-        panel.add(btAdd, gbc);
-
         // button to cancel the dialog
         btCancel = new JButton("Cancel");
         btCancel.addActionListener(this);
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = ++currentY;
+        panel.add(btCancel, gbc);
+        
+        // button to confirm the adding
+        btAdd = new JButton("Add Employee");
+        btAdd.addActionListener(this);
         gbc.gridx = 1;
         gbc.gridy = currentY;
-        panel.add(btCancel, gbc);
+        panel.add(btAdd, gbc);
+
         getContentPane().add(panel);
         pack();
         setLocationRelativeTo(parent);
+        System.out.println(datePicker);
     }
 
     private void addInput(JLabel tf, Component input) {
@@ -158,9 +167,9 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
         fx.setBackground(color);
 
         panel.add(fx, gbc);
+        fx.setScene(createDatePicker());
 
         Platform.runLater(() -> {
-            fx.setScene(createDatePicker());
             pack();
         });
 
