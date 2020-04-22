@@ -28,7 +28,7 @@ import javax.swing.event.PopupMenuListener;
  */
 public class EmployeesGUI extends javax.swing.JFrame {
 
-    private DBAccess db;
+    public static DBAccess db;
     private EmployeeTableModel tableModel;
 
     /**
@@ -40,9 +40,9 @@ public class EmployeesGUI extends javax.swing.JFrame {
             db.setup();
             tableModel = new EmployeeTableModel(db.employees);
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(EmployeesGUI.class.getName()).
-                    log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "The database setup failed!");
         }
+        setLocationByPlatform(true);
         initComponents();
         popTable.addPopupMenuListener(new PopupMenuListener() {
             @Override
@@ -50,7 +50,8 @@ public class EmployeesGUI extends javax.swing.JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (tbEmployees.getSelectedRowCount() > 0) return;
+                        if (tbEmployees.getSelectedRowCount() > 0)
+                            return;
                         int rowAtPoint = tbEmployees.rowAtPoint(SwingUtilities.
                                 convertPoint(popTable, new Point(0, 0),
                                         tbEmployees));
@@ -84,6 +85,8 @@ public class EmployeesGUI extends javax.swing.JFrame {
         miDelete = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         btAddEmp = new javax.swing.JButton();
+        jSeparator3 = new javax.swing.JSeparator();
+        btInsertData = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btAvg = new javax.swing.JButton();
         lbAvg = new javax.swing.JLabel();
@@ -113,7 +116,22 @@ public class EmployeesGUI extends javax.swing.JFrame {
         btAddEmp.setText("Add Employee");
         btAddEmp.setAlignmentX(0.5F);
         btAddEmp.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btAddEmp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onAddEmp(evt);
+            }
+        });
         jPanel1.add(btAddEmp);
+        jPanel1.add(jSeparator3);
+
+        btInsertData.setText("(Re-)Insert test data");
+        btInsertData.setAlignmentX(0.5F);
+        btInsertData.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onInsertData(evt);
+            }
+        });
+        jPanel1.add(btInsertData);
         jPanel1.add(jSeparator1);
 
         btAvg.setText("Get average salary");
@@ -203,9 +221,36 @@ public class EmployeesGUI extends javax.swing.JFrame {
                         "There was an error when deleting a employee");
             }
         });
-        
+
         onFilter(null);
     }//GEN-LAST:event_onDelete
+
+    private void onInsertData(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onInsertData
+        try {
+            db.insertEmployees();
+            this.tableModel.changeData(db.employees);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "There was an error when inserting the test data");
+        }
+    }//GEN-LAST:event_onInsertData
+
+    private void onAddEmp(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAddEmp
+        AddEmployeeDialog aed = new AddEmployeeDialog(this, db.highestPersNr+1);
+        Employee res = aed.run();
+        if(res == null) {
+            return;
+        }
+        try {
+            db.insertEmployee(res);
+            db.employees = db.getEmployees();
+            tableModel.changeData(db.employees);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "There was an error when inserting the employee");
+            System.out.println(ex.toString());
+        }
+    }//GEN-LAST:event_onAddEmp
 
     /**
      * @param args the command line arguments
@@ -251,10 +296,12 @@ public class EmployeesGUI extends javax.swing.JFrame {
     private javax.swing.JButton btAddEmp;
     private javax.swing.JButton btAvg;
     private javax.swing.JButton btFilter;
+    private javax.swing.JButton btInsertData;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lbAvg;
     private javax.swing.JLabel lbFilter;
     private javax.swing.JMenuItem miDelete;

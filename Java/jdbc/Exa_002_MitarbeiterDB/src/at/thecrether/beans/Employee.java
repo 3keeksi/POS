@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  *
@@ -129,5 +130,31 @@ public class Employee {
         arr[5] = abt_nr;
         arr[6] = geschlecht;
         return arr;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Employee other = (Employee) obj;
+        if (!Objects.equals(this.name.toLowerCase(), other.name.toLowerCase()))
+            return false;
+        if (!Objects.equals(this.vorname.toLowerCase(), other.vorname.toLowerCase()))
+            return false;
+        if (!Objects.equals(this.geschlecht, other.geschlecht))
+            return false;
+        if (!Objects.equals(this.geb_datum, other.geb_datum))
+            return false;
+        return true;
     }
 }

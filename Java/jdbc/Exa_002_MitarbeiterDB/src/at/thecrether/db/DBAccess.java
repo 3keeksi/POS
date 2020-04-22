@@ -29,6 +29,10 @@ import java.util.logging.Logger;
  */
 public class DBAccess {
 
+    private String baseUrl = "jdbc:postgresql://localhost/";
+    private String username = "postgres";
+    private String password = "postgres";
+
     private Connection con;
 
     private final String dataSql;
@@ -41,7 +45,10 @@ public class DBAccess {
     private PreparedStatement insEmp;
     private PreparedStatement remEmp;
     
-    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern("HH:mm:ss");
+    public int highestPersNr = 0;
+
+    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(
+            "HH:mm:ss");
 
     public DBAccess() throws ClassNotFoundException {
         // load postgres database driver (optional)
@@ -53,37 +60,47 @@ public class DBAccess {
     }
 
     /**
-     * connects to the database and creates the database/table
-     * also inserts the data
-     * @throws SQLException 
+     * connects to the database and creates the database/table also inserts the
+     * data
+     *
+     * @throws SQLException
      */
     public void setup() throws SQLException {
         log("starting the setup!");
+        log("creating the database if it isnt there");
+        try  {
+        createDB();
+        } catch (SQLException e) {
+            log("could not connect to server!");
+            throw e;
+        }
+        log("finished creating the database");
+
         log("starting to connect to the database!");
         connect();
         log("finished connecting to the database!");
-        
-        log("creating the database if it isnt there");
-        createDB();
-        log("finished creating the database");
-        
+
         log("creating the table if it isnt there");
         createTable();
         log("finished creating the table");
-        
-        log("inserting all the test data");
-        insertEmployees();
+
+        log("getting current employees");
         employees = getEmployees();
-        log("inserted the test data");
+        log("got the current employees");
     }
 
     public List<Employee> getEmployees() throws SQLException {
         List<Employee> list = new ArrayList<>();
         Statement st = con.createStatement();
-        ResultSet set = st.executeQuery("SELECT * FROM mitarbeiter ORDER BY name, vorname;");
+        ResultSet set = st.executeQuery(
+                "SELECT * FROM mitarbeiter ORDER BY name, vorname;");
 
         while (set.next()) {
-            list.add(new Employee(set));
+            Employee emp = new Employee(set);
+            list.add(emp);
+            if (highestPersNr < emp.getPers_nr()) {
+                highestPersNr = emp.getPers_nr();
+            }
         }
 
         return list;
@@ -91,12 +108,10 @@ public class DBAccess {
 
     public void connect() throws SQLException {
         // Default port number is 5432
-        String url = "jdbc:postgresql://localhost/mitarbeiterdb";
-        String username = "postgres";
-        String password = "postgres";
+        String url = baseUrl + "mitarbeiterdb";
         con = DriverManager.getConnection(url, username, password);
         log("connected to mitarbeiterdb");
-        
+
         // load all the prepared statements
         String empFromDepSql = FileLoader.loadSql("empFromDep.sql");
         String avgSalSql = FileLoader.loadSql("avgSal.sql");
@@ -107,7 +122,7 @@ public class DBAccess {
         avgSal = con.prepareStatement(avgSalSql);
         insEmp = con.prepareStatement(insEmpSql);
         remEmp = con.prepareStatement(remEmpSql);
-        
+
         log("sucessfully loaded all prepared statements");
     }
 
@@ -116,11 +131,18 @@ public class DBAccess {
             con.close();
     }
 
-    public boolean createDB() {
+    public boolean createDB() throws SQLException {
+        // Default port number is 5432
+        String url = baseUrl + "postgres";
+        Connection connection = DriverManager.getConnection(url, username,
+                password);
+
         String sql = "CREATE DATABASE mitarbeiterdb;";
         // create statement with a "try-resources" block
-        try (Statement st = con.createStatement()) {
-            return st.execute(sql);
+        try (Statement st = connection.createStatement()) {
+            boolean val = st.execute(sql);
+            connection.close();
+            return val;
         } catch (SQLException e) {
             return false;
         }
@@ -138,16 +160,23 @@ public class DBAccess {
     public void insertEmployees() throws SQLException {
         // check if the table mitarbeiter exists and then delete all rows
         // to always have the newest data, if it doesn't exist, create the table
+        log("inserting test data");
         try (Statement st = con.createStatement()) {
             try {
+                log("trying to delete all rows from mitarbeiter");
                 st.execute("DELETE FROM mitarbeiter;");
+                log("deleted all rows from mitarbeiter");
             } catch (SQLException e) {
+                log("there is no mitarbeiter table, creating it");
                 createTable();
             }
 
             // insert the data into the mitarbeiter table
             st.execute(dataSql);
+            log("(re-)inserted all the test data");
         }
+
+        employees = getEmployees();
     }
 
     public List<Employee> getEmployeesFromDepartment(int department) throws SQLException {
@@ -158,7 +187,7 @@ public class DBAccess {
         while (set.next()) {
             list.add(new Employee(set));
         }
-        
+
         log("getting employees for a department");
 
         return list;
@@ -168,8 +197,9 @@ public class DBAccess {
         avgSal.setString(1, "" + gender);
         ResultSet set = avgSal.executeQuery();
         log("getting the average salary for " + gender);
-        
-        if(set.next()) return set.getBigDecimal(1).doubleValue();
+
+        if (set.next())
+            return set.getBigDecimal(1).doubleValue();
         return 0;
     }
 
@@ -182,7 +212,8 @@ public class DBAccess {
         insEmp.setBigDecimal(5, employee.getGehalt());
         insEmp.setInt(6, employee.getAbt_nr());
         insEmp.setString(7, employee.getGeschlecht());
-        
+        highestPersNr = employee.getPers_nr();
+
         log("inserting an employee");
 
         return insEmp.execute();
@@ -190,7 +221,7 @@ public class DBAccess {
 
     public boolean removeEmployee(Employee employee) throws SQLException {
         remEmp.setInt(1, employee.getPers_nr());
-        log("removing an employee");
+        log("removing employee with pers_nr: " + employee.getPers_nr());
         return remEmp.execute();
     }
 
@@ -198,14 +229,16 @@ public class DBAccess {
         try {
             DBAccess db = new DBAccess();
             db.setup();
-            Employee emp = new Employee(0, "Imeri", "Denis", LocalDate.now(), BigDecimal.TEN, 2, "M");
+            Employee emp = new Employee(0, "Imeri", "Denis", LocalDate.now(),
+                    BigDecimal.TEN, 2, "M");
 //            db.insertEmployee(emp);
             db.removeEmployee(emp);
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(DBAccess.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBAccess.class.getName()).log(Level.SEVERE, null,
+                    ex);
         }
     }
-    
+
     private void log(String msg) {
         LocalTime now = LocalTime.now();
         System.out.format("[%s] %s\n", DTF.format(now), msg);
