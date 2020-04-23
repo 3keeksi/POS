@@ -14,6 +14,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.time.LocalDate;
@@ -39,7 +40,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 /**
  *
@@ -171,7 +171,7 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
         Platform.runLater(() -> {
             // this is just weird a lot of times
             fx.setScene(createDatePicker());
-            setMinimumSize(new Dimension(300, getHeight()+50));
+            setMinimumSize(new Dimension(300, getHeight() + 50));
             pack();
         });
 
@@ -238,8 +238,11 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
                     getText(), date,
                     BigDecimal.valueOf(salary), abtNr,
                     geschlecht);
-        } else
+        } else {
             emp = null;
+            setVisible(false);
+            dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
         if (emp != null && EmployeesGUI.db.employees.contains(emp)) {
             emp = null;
             JOptionPane.showMessageDialog(this, "This employee already exists!");
