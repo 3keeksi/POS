@@ -6,7 +6,6 @@
 package at.thecrether.bl;
 
 import at.thecrether.beans.Employee;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
@@ -17,7 +16,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class EmployeeTableModel extends AbstractTableModel {
 
-    private String[] columns = {"Person No.", "Surname", "Firstname",
+    private final String[] columns = {"Person No.", "Surname", "Firstname",
         "Birthdate", "Salaray", "Department No.", "Gender"};
     private List<Object[]> rowData;
 

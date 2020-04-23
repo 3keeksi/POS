@@ -10,13 +10,9 @@ import at.thecrether.bl.EmployeeTableModel;
 import at.thecrether.db.DBAccess;
 import java.awt.Component;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Platform;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.PopupMenuEvent;
@@ -40,25 +36,25 @@ public class EmployeesGUI extends javax.swing.JFrame {
             db.setup();
             tableModel = new EmployeeTableModel(db.employees);
         } catch (ClassNotFoundException | SQLException ex) {
-            JOptionPane.showMessageDialog(this, "The database setup failed!");
+            Platform.runLater(() -> {
+                JOptionPane.
+                        showMessageDialog(this, "The database setup failed!");
+            });
         }
         setLocationByPlatform(true);
         initComponents();
         popTable.addPopupMenuListener(new PopupMenuListener() {
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (tbEmployees.getSelectedRowCount() > 0)
-                            return;
-                        int rowAtPoint = tbEmployees.rowAtPoint(SwingUtilities.
-                                convertPoint(popTable, new Point(0, 0),
-                                        tbEmployees));
-                        if (rowAtPoint > -1)
-                            tbEmployees.setRowSelectionInterval(rowAtPoint,
-                                    rowAtPoint);
-                    }
+                SwingUtilities.invokeLater(() -> {
+                    if (tbEmployees.getSelectedRowCount() > 0)
+                        return;
+                    int rowAtPoint = tbEmployees.rowAtPoint(SwingUtilities.
+                            convertPoint(popTable, new Point(0, 0),
+                                    tbEmployees));
+                    if (rowAtPoint > -1)
+                        tbEmployees.setRowSelectionInterval(rowAtPoint,
+                                rowAtPoint);
                 });
             }
 
@@ -236,11 +232,10 @@ public class EmployeesGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_onInsertData
 
     private void onAddEmp(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onAddEmp
-        AddEmployeeDialog aed = new AddEmployeeDialog(this, db.highestPersNr+1);
+        AddEmployeeDialog aed = new AddEmployeeDialog(this, db.highestPersNr + 1);
         Employee res = aed.run();
-        if(res == null) {
+        if (res == null)
             return;
-        }
         try {
             db.insertEmployee(res);
             db.employees = db.getEmployees();
@@ -286,10 +281,8 @@ public class EmployeesGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new EmployeesGUI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new EmployeesGUI().setVisible(true);
         });
     }
 

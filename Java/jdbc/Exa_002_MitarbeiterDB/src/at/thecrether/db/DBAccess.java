@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.postgresql.util.PSQLException;
 
 /**
  * DBConnector is the connector class to the PostgreSQL database
@@ -29,9 +30,9 @@ import java.util.logging.Logger;
  */
 public class DBAccess {
 
-    private String baseUrl = "jdbc:postgresql://localhost/";
-    private String username = "postgres";
-    private String password = "postgres";
+    private final String baseUrl = "jdbc:postgresql://localhost/";
+    private final String username = "postgres";
+    private final String password = "postgres";
 
     private Connection con;
 
@@ -44,17 +45,17 @@ public class DBAccess {
     private PreparedStatement avgSal;
     private PreparedStatement insEmp;
     private PreparedStatement remEmp;
-    
+
     public int highestPersNr = 0;
 
-    private static DateTimeFormatter DTF = DateTimeFormatter.ofPattern(
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(
             "HH:mm:ss");
 
     public DBAccess() throws ClassNotFoundException {
         // load postgres database driver (optional)
         Class.forName("org.postgresql.Driver");
 
-        // load all the sql statements
+        // load the normal sql statements
         dataSql = FileLoader.loadSql("data.sql");
         createSql = FileLoader.loadSql("createTable.sql");
     }
@@ -68,8 +69,8 @@ public class DBAccess {
     public void setup() throws SQLException {
         log("starting the setup!");
         log("creating the database if it isnt there");
-        try  {
-        createDB();
+        try {
+            createDB();
         } catch (SQLException e) {
             log("could not connect to server!");
             throw e;
@@ -98,9 +99,8 @@ public class DBAccess {
         while (set.next()) {
             Employee emp = new Employee(set);
             list.add(emp);
-            if (highestPersNr < emp.getPers_nr()) {
+            if (highestPersNr < emp.getPers_nr())
                 highestPersNr = emp.getPers_nr();
-            }
         }
 
         return list;
@@ -157,6 +157,10 @@ public class DBAccess {
         }
     }
 
+    /**
+     * this one is for inserting the testdata script
+     * @throws SQLException 
+     */
     public void insertEmployees() throws SQLException {
         // check if the table mitarbeiter exists and then delete all rows
         // to always have the newest data, if it doesn't exist, create the table
@@ -203,6 +207,12 @@ public class DBAccess {
         return 0;
     }
 
+    /**
+     * this is for inserting a single employee
+     * @param employee the employee you want to insert
+     * @return if it added the employee or not
+     * @throws SQLException 
+     */
     public boolean insertEmployee(Employee employee) throws SQLException {
         // replace all the values
         insEmp.setInt(1, employee.getPers_nr());
@@ -239,7 +249,7 @@ public class DBAccess {
         }
     }
 
-    private void log(String msg) {
+    private static void log(String msg) {
         LocalTime now = LocalTime.now();
         System.out.format("[%s] %s\n", DTF.format(now), msg);
     }

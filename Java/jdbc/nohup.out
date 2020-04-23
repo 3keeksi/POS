@@ -1,0 +1,43 @@
+QObject::startTimer: Timers cannot have negative intervals
+Using QSytemTrayIcon
+Path to settings: "/home/crether/.config/ckb-next/ckb-next.conf"
+Icon theme "ubuntu-mono-dark" not found.
+Icon theme "Mint-X" not found.
+Icon theme "elementary" not found.
+Scanning "/usr/lib/ckb-next-animations/gradient"
+Scanning "/usr/lib/ckb-next-animations/heat"
+Scanning "/usr/lib/ckb-next-animations/invaders"
+Scanning "/usr/lib/ckb-next-animations/life"
+Scanning "/usr/lib/ckb-next-animations/mviz"
+Scanning "/usr/lib/ckb-next-animations/pinwheel"
+Scanning "/usr/lib/ckb-next-animations/pipe"
+Scanning "/usr/lib/ckb-next-animations/rain"
+Scanning "/usr/lib/ckb-next-animations/random"
+Scanning "/usr/lib/ckb-next-animations/ripple"
+Scanning "/usr/lib/ckb-next-animations/snake"
+Scanning "/usr/lib/ckb-next-animations/wave"
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+qt.gui.icc: Unsupported ICC profile class 70727472
+qt.gui.icc: fromIccProfile: failed general sanity check
+QPngHandler: Failed to parse ICC profile
+Starting "/usr/lib/ckb-next-animations/wave"
+Downloaded new firmware list. 38 entries found.
+
+Signal 2 caught. Quitting...

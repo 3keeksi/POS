@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -24,11 +25,15 @@ public class Employee {
     private BigDecimal gehalt;
     private int abt_nr;
     private String geschlecht;
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(
+            "dd.MM.yyyy");
 
     public Employee() {
     }
 
-    public Employee(int pers_nr, String name, String vorname, LocalDate geb_datum, BigDecimal gehalt, int abt_nr, String geschlecht) {
+    public Employee(int pers_nr, String name, String vorname,
+            LocalDate geb_datum, BigDecimal gehalt, int abt_nr,
+            String geschlecht) {
         this.pers_nr = pers_nr;
         this.name = name;
         this.vorname = vorname;
@@ -53,12 +58,17 @@ public class Employee {
         this.abt_nr = set.getInt("abt_nr");
         this.geschlecht = set.getString("geschlecht");
     }
-    
+
+    /**
+     * create a Employee from an table data row
+     *
+     * @param arr
+     */
     public Employee(Object[] arr) {
         pers_nr = (int) arr[0];
         name = (String) arr[1];
         vorname = (String) arr[2];
-        geb_datum = (LocalDate) arr[3];
+        geb_datum = LocalDate.parse((String) arr[3], DTF);
         gehalt = (BigDecimal) arr[4];
         abt_nr = (int) arr[5];
         geschlecht = (String) arr[6];
@@ -120,12 +130,17 @@ public class Employee {
         this.geschlecht = geschlecht;
     }
 
+    /**
+     * convert to a table data row
+     *
+     * @return an table data row containing the attributes
+     */
     public Object[] convertToTableData() {
         Object[] arr = new Object[7];
         arr[0] = pers_nr;
         arr[1] = name;
         arr[2] = vorname;
-        arr[3] = geb_datum;
+        arr[3] = DTF.format(geb_datum);
         arr[4] = gehalt;
         arr[5] = abt_nr;
         arr[6] = geschlecht;
@@ -149,7 +164,8 @@ public class Employee {
         final Employee other = (Employee) obj;
         if (!Objects.equals(this.name.toLowerCase(), other.name.toLowerCase()))
             return false;
-        if (!Objects.equals(this.vorname.toLowerCase(), other.vorname.toLowerCase()))
+        if (!Objects.equals(this.vorname.toLowerCase(), other.vorname.
+                toLowerCase()))
             return false;
         if (!Objects.equals(this.geschlecht, other.geschlecht))
             return false;

@@ -47,34 +47,34 @@ import javax.swing.UIManager;
  */
 public class AddEmployeeDialog extends JDialog implements ActionListener {
 
-    private JPanel panel;
-    private GridBagConstraints gbc;
+    private final JPanel panel;
+    private final GridBagConstraints gbc;
 
     private Employee emp;
-    private JTextField tfSurname;
-    private JTextField tfFirstname;
-    private JFormattedTextField tfGehalt;
+    private final JTextField tfSurname;
+    private final JTextField tfFirstname;
+    private final JFormattedTextField tfGehalt;
     private DatePicker datePicker;
-    private JFormattedTextField tfAbtNr;
-    private JComboBox<String> cbGeschlecht;
+    private final JFormattedTextField tfAbtNr;
+    private final JComboBox<String> cbGeschlecht;
 
-    private JButton btAdd;
-    private JButton btCancel;
+    private final JButton btAdd;
+    private final JButton btCancel;
 
     private int currentY = 0;
-    private int persNr;
+    private final int persNr;
 
     public AddEmployeeDialog(Frame parent, int persNr) {
         super(parent, "Insert a Employee", true);
         this.persNr = persNr;
-        setMinimumSize(new Dimension(300, 420));
+        setMinimumSize(new Dimension(300, 350));
         panel = new JPanel();
-        panel.setMinimumSize(new Dimension(300, 420));
+        panel.setMinimumSize(new Dimension(300, 350));
         panel.setLayout(new GridBagLayout());
         gbc = new GridBagConstraints();
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        
+
         gbc.gridx = 0;
         gbc.gridy = currentY++;
         gbc.gridwidth = 2;
@@ -122,7 +122,7 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = ++currentY;
         panel.add(btCancel, gbc);
-        
+
         // button to confirm the adding
         btAdd = new JButton("Add Employee");
         btAdd.addActionListener(this);
@@ -167,9 +167,11 @@ public class AddEmployeeDialog extends JDialog implements ActionListener {
         fx.setBackground(color);
 
         panel.add(fx, gbc);
-        fx.setScene(createDatePicker());
 
         Platform.runLater(() -> {
+            // this is just weird a lot of times
+            fx.setScene(createDatePicker());
+            setMinimumSize(new Dimension(300, getHeight()+50));
             pack();
         });
 
