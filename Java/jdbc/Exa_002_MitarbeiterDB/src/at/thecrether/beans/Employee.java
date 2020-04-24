@@ -73,6 +73,17 @@ public class Employee {
         abt_nr = (int) arr[5];
         geschlecht = (String) arr[6];
     }
+    
+    public Employee(String line) {
+        String[] split = line.split(";");
+        pers_nr = 0;
+        name = split[0];
+        vorname = split[1];
+        geb_datum = LocalDate.parse((String) split[2], DTF);
+        gehalt = BigDecimal.valueOf(Double.parseDouble(split[3]));
+        abt_nr = Integer.parseInt(split[4]);
+        geschlecht = split[5].charAt(0)+"";
+    }
 
     public int getPers_nr() {
         return pers_nr;

@@ -8,10 +8,15 @@ package at.thecrether.ui;
 import at.thecrether.beans.Employee;
 import at.thecrether.bl.EmployeeTableModel;
 import at.thecrether.db.DBAccess;
+import at.thecrether.sql.FileLoader;
 import java.awt.Component;
 import java.awt.Point;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -83,6 +88,7 @@ public class EmployeesGUI extends javax.swing.JFrame {
         btAddEmp = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         btInsertData = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btAvg = new javax.swing.JButton();
         lbAvg = new javax.swing.JLabel();
@@ -128,6 +134,15 @@ public class EmployeesGUI extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btInsertData);
+
+        jButton1.setText("Insert CSV Data");
+        jButton1.setAlignmentX(0.5F);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onInsertCSV(evt);
+            }
+        });
+        jPanel1.add(jButton1);
         jPanel1.add(jSeparator1);
 
         btAvg.setText("Get average salary");
@@ -248,6 +263,22 @@ public class EmployeesGUI extends javax.swing.JFrame {
         aed.invalidate();
     }//GEN-LAST:event_onAddEmp
 
+    private void onInsertCSV(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onInsertCSV
+        try {
+            List<Employee> toInsert = FileLoader.loadCSV();
+            for (Employee employee : toInsert) {
+                employee.setPers_nr(db.highestPersNr+1);
+                db.insertEmployee(employee);
+            }
+            db.employees = db.getEmployees();
+            tableModel.changeData(db.employees);
+        } catch (FileNotFoundException ex) {
+            JOptionPane.showMessageDialog(this, "could not find the csv file!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "could not insert employees");
+        }
+    }//GEN-LAST:event_onInsertCSV
+
     /**
      * @param args the command line arguments
      */
@@ -291,6 +322,7 @@ public class EmployeesGUI extends javax.swing.JFrame {
     private javax.swing.JButton btAvg;
     private javax.swing.JButton btFilter;
     private javax.swing.JButton btInsertData;
+    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
