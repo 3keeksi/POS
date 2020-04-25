@@ -38,7 +38,7 @@ public class DBAccess {
 
     private final String dataSql;
     private final String createSql;
-    public List<Employee> employees;
+    public List<Employee> employees = new ArrayList<>();
 
     // these are the statements where i programmatically insert the values
     private PreparedStatement empFromDep;
@@ -126,9 +126,18 @@ public class DBAccess {
         log("sucessfully loaded all prepared statements");
     }
 
-    public void disconnect() throws SQLException {
-        if (con != null && !con.isClosed())
+    /**
+     * Disconnect from the database
+     *
+     * @return true if the connection was closed successfully
+     * @throws SQLException
+     */
+    public boolean disconnect() throws SQLException {
+        if (con != null && !con.isClosed()) {
             con.close();
+            return true;
+        }
+        return false;
     }
 
     public boolean createDB() throws SQLException {
@@ -139,27 +148,38 @@ public class DBAccess {
 
         String sql = "CREATE DATABASE mitarbeiterdb;";
         // create statement with a "try-resources" block
-        try (Statement st = connection.createStatement()) {
+        Statement st = connection.createStatement();
+        try {
             boolean val = st.execute(sql);
             connection.close();
-            return val;
         } catch (SQLException e) {
+            // delete the database if it already exists
+            st.execute("DROP DATABASE mitarbeiterdb");
+            log("drop");
+            st.execute(sql);
             return false;
         }
+        return true;
     }
 
-    public boolean createTable() {
-        // create the mitarbeiter table with a "try-resources" block
-        try (Statement st = con.createStatement()) {
-            return st.execute(createSql);
-        } catch (SQLException e) {
+    public boolean createTable() throws SQLException {
+        if (con == null)
             return false;
+        // create the mitarbeiter table with a "try-resources" block
+        Statement st = con.createStatement();
+        try {
+            st.execute(createSql);
+        } catch (SQLException e) {
+            st.execute("DROP TABLE mitarbeiter;");
+            st.execute(createSql);
         }
+        return true;
     }
 
     /**
      * this one is for inserting the testdata script
-     * @throws SQLException 
+     *
+     * @throws SQLException
      */
     public void insertEmployees() throws SQLException {
         // check if the table mitarbeiter exists and then delete all rows
@@ -209,9 +229,10 @@ public class DBAccess {
 
     /**
      * this is for inserting a single employee
+     *
      * @param employee the employee you want to insert
      * @return if it added the employee or not
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean insertEmployee(Employee employee) throws SQLException {
         // replace all the values

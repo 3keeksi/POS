@@ -38,9 +38,8 @@ public class EmployeesGUI extends javax.swing.JFrame {
     public EmployeesGUI() {
         try {
             db = new DBAccess();
-            db.setup();
             tableModel = new EmployeeTableModel(db.employees);
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (ClassNotFoundException ex) {
             Platform.runLater(() -> {
                 JOptionPane.
                         showMessageDialog(this, "The database setup failed!");
@@ -71,6 +70,7 @@ public class EmployeesGUI extends javax.swing.JFrame {
             public void popupMenuCanceled(PopupMenuEvent e) {
             }
         });
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -84,11 +84,17 @@ public class EmployeesGUI extends javax.swing.JFrame {
 
         popTable = new javax.swing.JPopupMenu();
         miDelete = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         btAddEmp = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         btInsertData = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JSeparator();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         btAvg = new javax.swing.JButton();
         lbAvg = new javax.swing.JLabel();
@@ -108,6 +114,8 @@ public class EmployeesGUI extends javax.swing.JFrame {
         popTable.add(miDelete);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(650, 600));
+        setPreferredSize(new java.awt.Dimension(650, 450));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel1.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -143,6 +151,43 @@ public class EmployeesGUI extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton1);
+        jPanel1.add(jSeparator5);
+
+        jButton2.setText("Connect to the DB");
+        jButton2.setAlignmentX(0.5F);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onConnect(evt);
+            }
+        });
+        jPanel1.add(jButton2);
+
+        jButton3.setText("Disconnect from the DB");
+        jButton3.setAlignmentX(0.5F);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onDisconnect(evt);
+            }
+        });
+        jPanel1.add(jButton3);
+
+        jButton4.setText("Create the DB");
+        jButton4.setAlignmentX(0.5F);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onCreateDB(evt);
+            }
+        });
+        jPanel1.add(jButton4);
+
+        jButton5.setText("Create the Table");
+        jButton5.setAlignmentX(0.5F);
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onCreateTable(evt);
+            }
+        });
+        jPanel1.add(jButton5);
         jPanel1.add(jSeparator1);
 
         btAvg.setText("Get average salary");
@@ -267,7 +312,7 @@ public class EmployeesGUI extends javax.swing.JFrame {
         try {
             List<Employee> toInsert = FileLoader.loadCSV();
             for (Employee employee : toInsert) {
-                employee.setPers_nr(db.highestPersNr+1);
+                employee.setPers_nr(db.highestPersNr + 1);
                 db.insertEmployee(employee);
             }
             db.employees = db.getEmployees();
@@ -278,6 +323,69 @@ public class EmployeesGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "could not insert employees");
         }
     }//GEN-LAST:event_onInsertCSV
+
+    private void onConnect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onConnect
+        try {
+            db.connect();
+            JOptionPane.showMessageDialog(this,
+                    "connected to the mitarbeiter database");
+        } catch (SQLException ex) {
+            int out = JOptionPane.showConfirmDialog(this,
+                    "The mitarbeiter database does not exist.\nDo you want to create it?");
+            // create database if the response is yes
+            if (out == 0)
+                try {
+                db.createDB();
+            } catch (SQLException ex1) {
+                JOptionPane.showMessageDialog(this,
+                        "could not create the database!");
+            }
+        }
+    }//GEN-LAST:event_onConnect
+
+    private void onDisconnect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onDisconnect
+        try {
+            if (db.disconnect())
+                JOptionPane.showMessageDialog(this,
+                        "successfully disconnected from the database");
+            else
+                JOptionPane.showMessageDialog(this,
+                        "could not disconnect the database because there was no connection");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "there was an error when disconnecting from the database");
+        }
+    }//GEN-LAST:event_onDisconnect
+
+    private void onCreateDB(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCreateDB
+        try {
+            db.disconnect();
+            if (db.createDB())
+                JOptionPane.showMessageDialog(this,
+                        "successfully created the database");
+            else
+                JOptionPane.showMessageDialog(this, "recreated the database!");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "could not create the database!\n"
+                    + "are you maybe still connected to the database in your browser or in the app?");
+        }
+    }//GEN-LAST:event_onCreateDB
+
+    private void onCreateTable(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onCreateTable
+        try {
+            if (!db.createTable())
+                JOptionPane.showMessageDialog(this,
+                        "there is no connection to the database.\n"
+                        + "Could not create the table");
+            else
+                JOptionPane.
+                        showMessageDialog(this, "successfully created the table");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this,
+                    "there was an error when creating the table");
+        }
+    }//GEN-LAST:event_onCreateTable
 
     /**
      * @param args the command line arguments
@@ -323,11 +431,17 @@ public class EmployeesGUI extends javax.swing.JFrame {
     private javax.swing.JButton btFilter;
     private javax.swing.JButton btInsertData;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private javax.swing.JLabel lbAvg;
     private javax.swing.JLabel lbFilter;
     private javax.swing.JMenuItem miDelete;
